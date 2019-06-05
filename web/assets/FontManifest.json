@@ -1,0 +1,26 @@
+[
+  {
+    "family": "gs",
+    "fonts": [
+      {
+        "asset": "GoogleSans-Regular.ttf"
+      }
+    ]
+  },
+  {
+    "family": "fa",
+    "fonts": [
+      {
+        "asset": "FontAwesome.otf"
+      }
+    ]
+  },
+  {
+    "family": "ss",
+    "fonts": [
+      {
+        "asset": "Serpentine Sans ICG Cyrillic Bold.otf"
+      }
+    ]
+  }
+]
