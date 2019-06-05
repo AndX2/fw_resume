@@ -56,7 +56,7 @@ class MainPage extends StatelessWidget {
   }) : super(key: key);
 
   final GlobalKey<ScaffoldState> scaffoldKey;
-  ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -235,14 +235,17 @@ class MainPage extends StatelessWidget {
                                 _buildBlockPadding(
                                   screenScale,
                                   child: Builder(builder: (context) {
-                                    double h =
-                                        (skills.length / 3.0).round() * (230.0);
+                                    int gridColumnCount = 3;
+                                    double h = ((skills.length * 1.0) /
+                                                gridColumnCount)
+                                            .ceil() *
+                                        (230.0 * screenScale);
                                     return Container(
                                       height: h,
                                       child: GridView.count(
                                         controller: _controller,
                                         addAutomaticKeepAlives: false,
-                                        crossAxisCount: 3,
+                                        crossAxisCount: gridColumnCount,
                                         children: List.generate(
                                           skills.length,
                                           (index) {
@@ -259,7 +262,37 @@ class MainPage extends StatelessWidget {
                                       ),
                                     );
                                   }),
-                                )
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    SizedBox(width: 24.0 * screenScale),
+                                    Icon(
+                                      icons.Icons.book,
+                                      color: Colors.grey[600],
+                                      size: 40.0 * screenScale,
+                                    ),
+                                    SizedBox(width: 10.0 * screenScale),
+                                    Text(
+                                      'ACHIVEMENTs',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .title
+                                          .copyWith(
+                                              color: Colors.grey[600],
+                                              fontSize: 28.0 * screenScale,
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(width: 5.0),
+                                    Flexible(
+                                      child: Container(
+                                        height: 2.0 * screenScale,
+                                        color: Colors.grey[600],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                _buildBlockPadding(screenScale,
+                                    child: Container()),
                               ],
                             ),
                           ),
