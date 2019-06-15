@@ -8,4 +8,7 @@ class Icons {
   static const IconData globe = IconData(0xf0ac, fontFamily: 'fa');
   static const IconData book = IconData(0xf02d, fontFamily: 'fa');
   static const IconData brief = IconData(0xf0b1, fontFamily: 'fa');
+  static const IconData achive = IconData(0xf091, fontFamily: 'fa');
+  static const IconData email = IconData(0xf0e0, fontFamily: 'fa');
+  static const IconData telegram = IconData(0xf2c6, fontFamily: 'fa');
 }

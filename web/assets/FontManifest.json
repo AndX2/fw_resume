@@ -22,5 +22,13 @@
         "asset": "Serpentine Sans ICG Cyrillic Bold.otf"
       }
     ]
+  },
+  {
+    "family": "nova",
+    "fonts": [
+      {
+        "asset": "NovitoNova-Regular.otf"
+      }
+    ]
   }
 ]
