@@ -68,7 +68,7 @@ class ScreenBuilder extends StatelessWidget {
   }
 
   Widget _buildPhonePort() {
-    return Scaffold(body: ResumePage());
+    return Scaffold(body: ResumePage1());
   }
 
   Widget _buildPhoneLand() {
@@ -91,69 +91,122 @@ class ResumePage1 extends StatelessWidget {
   Widget build(BuildContext context) {
     final params = ScreenParams.of(context);
     return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('image/back.png'), fit: BoxFit.cover)),
+      // decoration: BoxDecoration(
+      // image: DecorationImage(
+      //     image: AssetImage('image/back.png'), fit: BoxFit.cover)),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: NestedScrollView(
-            headerSliverBuilder: (context, scrolled) {
-              return <Widget>[
-                SliverPersistentHeader(
-                  delegate:
-                      _SliverHeaderDelegate(baseSize: 900.0, screenScale: 0.8),
-                  pinned: true,
-                )
-              ];
-            },
-            body: ListView.builder(
-              itemCount: 20,
-              itemBuilder: (context, index) => Container(
-                    height: 200.0,
-                    color: Colors.red,
-                  ),
-            )),
+          headerSliverBuilder: (context, scrolled) {
+            return <Widget>[
+              SliverPersistentHeader(
+                delegate: _SliverHeaderDelegate(
+                    baseSize: params.baseSize, screenScale: params.scale),
+                pinned: true,
+              )
+            ];
+          },
+          body: ListView.builder(
+            itemCount: 20,
+            itemBuilder: (context, index) => Container(
+                  height: 200.0,
+                  // color: Colors.white,
+                ),
+          ),
+        ),
       ),
     );
   }
 }
 
 class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final maxHeight = 400.0;
-  final minHeight = 100.0;
+  final curveBarHeight = .25;
+  final curveBarWidth = .25;
+  final avatarLeftPadding = .1;
+  final avatarWidth = .3;
+
+  double _maxHeight;
+  double _minHeight;
   final double baseSize;
   final double screenScale;
-  _SliverHeaderDelegate({this.baseSize, this.screenScale});
+  _SliverHeaderDelegate({this.baseSize, this.screenScale}) {
+    this._maxHeight = .5 * baseSize / screenScale;
+    this._minHeight = .1 * baseSize / screenScale;
+  }
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return LayoutBuilder(builder: (context, cons) {
-      final shrinkScale = (cons.maxHeight - minHeight * screenScale) /
-          ((maxHeight - minHeight) * screenScale);
+      final params = ScreenParams.of(context);
+      final shrinkScale = (cons.maxHeight - _minHeight * screenScale) /
+          ((_maxHeight - _minHeight) * screenScale);
       // print(shrinkScale);
-      final imageSize = min(cons.maxHeight, cons.maxWidth);
-      return Pentagon(
-        color: Colors.orange,
-        shadowColor: Colors.white,
-        elevation: 8.0,
-        borderWidth: 3.0,
-        child: Image.asset(
-          'image/face_.jpg',
-          fit: BoxFit.contain,
+      return Stack(children: <Widget>[
+        Positioned.fill(
+          child: ClipPath(
+            clipper: BarClipper(),
+            child: Container(
+              color: Colors.blue,
+            ),
+          ),
         ),
-      );
+        Container(
+          padding: EdgeInsets.only(
+              bottom: cons.maxHeight * .3,
+              left: cons.maxWidth * avatarLeftPadding,
+              right: cons.maxWidth * (1.0 - avatarWidth - avatarLeftPadding)),
+          child: Pentagon(
+            color: Colors.deepOrange,
+            shadowColor: Colors.orange,
+            elevation: 32.0 * params.scale,
+            borderWidth: 3.0 * params.scale,
+            radius: 50.0 * params.scale,
+            child: Image.asset(
+              'image/face_.jpg',
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+      ]);
     });
   }
 
   @override
-  double get maxExtent => maxHeight * screenScale;
+  double get maxExtent => _maxHeight * screenScale;
 
   @override
-  double get minExtent => minHeight * screenScale;
+  double get minExtent => _minHeight * screenScale;
 
   @override
-  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+  bool shouldRebuild(_SliverHeaderDelegate oldDelegate) {
     return false;
+  }
+}
+
+class BarClipper extends CustomClipper<Path> {
+  final curveBarHeight = .25;
+  final curveBarWidth = .8;
+  final leftPadding = .25;
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.moveTo(size.width * leftPadding, .0);
+    path.lineTo(size.width * leftPadding, (1.0 - curveBarHeight) * size.height);
+    path.lineTo(size.width * curveBarWidth, size.height);
+    path.lineTo(
+        size.width,
+        (1.0 -
+                curveBarHeight *
+                    ((1 - curveBarWidth) / (curveBarWidth - leftPadding))) *
+            size.height);
+    path.lineTo(size.width, .0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(BarClipper oldClipper) {
+    return true;
   }
 }
 

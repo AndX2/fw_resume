@@ -14,12 +14,11 @@ class Pentagon extends StatelessWidget {
       this.shadowColor = Colors.black,
       this.borderWidth = 1.0,
       this.child,
-      this.radius,
+      this.radius = 1.0,
       this.elevation});
 
   @override
   Widget build(BuildContext context) {
-    print(shadowColor);
     return Stack(
       children: <Widget>[
         Positioned.fill(
@@ -29,7 +28,7 @@ class Pentagon extends StatelessWidget {
         ),
         Positioned.fill(
           child: ClipPath(
-            clipper: Clipper(),
+            clipper: Clipper(radius),
             child: Container(
               color: color,
             ),
@@ -41,12 +40,12 @@ class Pentagon extends StatelessWidget {
                     ? Padding(
                         padding: EdgeInsets.all(borderWidth),
                         child: ClipPath(
-                          clipper: Clipper(),
+                          clipper: Clipper(radius),
                           child: child,
                         ),
                       )
                     : ClipPath(
-                        clipper: Clipper(),
+                        clipper: Clipper(radius),
                         child: child,
                       ),
               )
@@ -58,12 +57,11 @@ class Pentagon extends StatelessWidget {
 
 class ShadowPainter extends CustomPainter {
   final Color color;
-  ShadowPainter({this.color}) {
-    color ?? Colors.black;
-  }
+  final double radius;
+  ShadowPainter({this.color = Colors.black, this.radius = 1.0});
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawShadow(_buildClip(size), color, 16.0, true);
+    canvas.drawShadow(_buildClip(size, radius), color, 16.0, true);
   }
 
   @override
@@ -73,9 +71,11 @@ class ShadowPainter extends CustomPainter {
 }
 
 class Clipper extends CustomClipper<Path> {
+  final double radius;
+  Clipper(this.radius);
   @override
   Path getClip(Size size) {
-    return _buildClip(size);
+    return _buildClip(size, radius);
   }
 
   @override
@@ -87,38 +87,42 @@ class Clipper extends CustomClipper<Path> {
 Path _cachedPath;
 Size _cashedSize;
 
-Path _buildClip(Size size) {
+Path _buildClip(Size size, double r) {
   if (size == _cashedSize && _cachedPath != null) return _cachedPath;
   var path = Path();
-  var r = 50.0;
+  // print(size);
+  // var r = 50.0;
   final count = 5;
   final angle = (count - 2) / count; //(.6*pi)
   final baseAngle = .5 + 2.0 / count; //(0.9*pi)
   final h = size.height;
   final w = size.width;
   final mS = (w > h) ? h : w;
+  print(mS);
   final a = mS / (2 * sin(.3 * pi));
-  if (r > a / 2) r = a / 2;
+  print(a);
+  if (r > a / 2.0) r = a / 2.0;
   final h5 = a * (cos(.3 * pi) + cos(.1 * pi));
+  final w5 = a * 2 * sin(.3 * pi);
   final ph = (h - h5) / 2;
-  final pw = (w - a * 2 * sin(.3 * pi)) / 2;
+  final pw = (w - w5) / 2;
   final outRectOffset = Offset(pw, ph);
-  final offsets = List<Offset>();
-  offsets.add(outRectOffset + Offset(0.0, a * cos(.3 * pi)));
-  offsets.add(outRectOffset + Offset(a * sin(.1 * pi), mS - 2 * ph));
-  offsets.add(outRectOffset + Offset(mS - a * sin(.1 * pi), mS - 2 * ph));
-  offsets.add(outRectOffset + Offset(mS, a * cos(.3 * pi)));
-  offsets.add(outRectOffset + Offset(mS / 2, 0.0));
+  // final offsets = List<Offset>();
+  // offsets.add(outRectOffset + Offset(0.0, a * cos(.3 * pi)));
+  // offsets.add(outRectOffset + Offset(a * sin(.1 * pi), mS - 2 * ph));
+  // offsets.add(outRectOffset + Offset(mS - a * sin(.1 * pi), mS - 2 * ph));
+  // offsets.add(outRectOffset + Offset(mS, a * cos(.3 * pi)));
+  // offsets.add(outRectOffset + Offset(mS / 2, 0.0));
   final c1 = outRectOffset + Offset(0.0, a * cos(.3 * pi));
-  final c2 = outRectOffset + Offset(a * sin(.1 * pi), mS - 2 * ph);
-  final c3 = outRectOffset + Offset(mS - a * sin(.1 * pi), mS - 2 * ph);
+  final c2 = outRectOffset + Offset(a * sin(.1 * pi), mS);
+  final c3 = outRectOffset + Offset(mS - a * sin(.1 * pi), mS);
   final c4 = outRectOffset + Offset(mS, a * cos(.3 * pi));
   final c5 = outRectOffset + Offset(mS / 2, 0.0);
   final ad = r / tan(.3 * pi);
   final wa = ad * sin(.3 * pi);
   final ha = ad * cos(.3 * pi);
   // path.addPolygon([c1, c2, c3, c4, c5], true);
-  final index = 0;
+  // final index = 0;
   // path.moveTo(c1.dx + ad * cos(.2 * pi), c1.dy - ad * sin(.2 * pi));
   path.moveTo(c1.dx - ad * cos((baseAngle + angle / 2) * pi),
       c1.dy + ad * sin((baseAngle + angle / 2) * pi));
