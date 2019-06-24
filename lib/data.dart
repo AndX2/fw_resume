@@ -2,25 +2,25 @@ const educations = [
   {
     'time': '09.2000...06.2006',
     'value':
-        'Nizhny Novgorod State Technical University \nDesign of technical and technological complexes',
+        'Nizhny Novgorod State Technical University \n Design of technical and technological complexes',
     'link': 'https://www.nntu.ru',
     'linkName': 'https://www.nntu.ru',
   },
   {
     'time': '02.2014...07.2014',
-    'value': 'Coursera \nAndroid App Development specialization',
+    'value': 'Coursera \n Android App Development specialization',
     'link': 'https://www.coursera.org/specializations/android-app-development',
     'linkName': 'https://www.coursera.org',
   },
   {
     'time': '04.2017...01.2018',
-    'value': 'Skill-branch \nAndroid Middle course',
+    'value': 'Skill-branch \n Android Middle course',
     'link': 'https://skill-branch.ru',
     'linkName': 'https://skill-branch.ru',
   },
   {
     'time': '12.2018...02.2019',
-    'value': 'Udemy.com \nFlutter & Dart to Build iOS & Android Apps ',
+    'value': 'Udemy.com \n Flutter & Dart to Build iOS & Android Apps ',
     'link':
         'https://www.udemy.com/learn-flutter-dart-to-build-ios-android-apps',
     'linkName': 'https://www.udemy.com',

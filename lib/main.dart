@@ -140,7 +140,7 @@ class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
       final params = ScreenParams.of(context);
       final shrinkScale = (cons.maxHeight - _minHeight * screenScale) /
           ((_maxHeight - _minHeight) * screenScale);
-      // print(shrinkScale);
+      // print(params.scale);
       return Stack(children: <Widget>[
         Positioned.fill(
           child: ClipPath(
@@ -157,8 +157,8 @@ class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
               right: cons.maxWidth * (1.0 - avatarWidth - avatarLeftPadding)),
           child: Pentagon(
             color: Colors.deepOrange,
-            shadowColor: Colors.orange,
-            elevation: 32.0 * params.scale,
+            shadowColor: Colors.black,
+            elevation: 4.0 * params.scale,
             borderWidth: 3.0 * params.scale,
             radius: 50.0 * params.scale,
             child: Image.asset(

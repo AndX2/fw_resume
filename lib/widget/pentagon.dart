@@ -23,7 +23,8 @@ class Pentagon extends StatelessWidget {
       children: <Widget>[
         Positioned.fill(
           child: CustomPaint(
-            painter: ShadowPainter(color: shadowColor),
+            painter: ShadowPainter(
+                color: shadowColor, radius: radius, elevation: elevation),
           ),
         ),
         Positioned.fill(
@@ -58,10 +59,12 @@ class Pentagon extends StatelessWidget {
 class ShadowPainter extends CustomPainter {
   final Color color;
   final double radius;
-  ShadowPainter({this.color = Colors.black, this.radius = 1.0});
+  final double elevation;
+  ShadowPainter(
+      {this.color = Colors.black, this.radius = 1.0, this.elevation = 4.0});
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawShadow(_buildClip(size, radius), color, 16.0, true);
+    canvas.drawShadow(_buildClip(size, radius), color, elevation, true);
   }
 
   @override
@@ -97,15 +100,17 @@ Path _buildClip(Size size, double r) {
   final baseAngle = .5 + 2.0 / count; //(0.9*pi)
   final h = size.height;
   final w = size.width;
-  final mS = (w > h) ? h : w;
-  print(mS);
+  //TODO: 0.95 - safe area padding. Fix it.
+  var mS = (w > h) ? h * .95 : w * .95;
+  // print(mS);
   final a = mS / (2 * sin(.3 * pi));
-  print(a);
-  if (r > a / 2.0) r = a / 2.0;
+  // print(a);
+  // mS = mS *.95;
+  if (r > a / 3.0) r = a / 3.0;
   final h5 = a * (cos(.3 * pi) + cos(.1 * pi));
   final w5 = a * 2 * sin(.3 * pi);
-  final ph = (h - h5) / 2;
-  final pw = (w - w5) / 2;
+  final ph = (h - h5) / 2.0;
+  final pw = (w - w5) / 2.0;
   final outRectOffset = Offset(pw, ph);
   // final offsets = List<Offset>();
   // offsets.add(outRectOffset + Offset(0.0, a * cos(.3 * pi)));
