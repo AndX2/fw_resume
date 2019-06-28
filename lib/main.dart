@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter_web/material.dart';
 import 'package:flutter_web/painting.dart';
 import 'package:flutter_web/widgets.dart';
+// import 'package:flutter_web_ui/ui.dart' as ui;
 import 'dart:html';
 
 import 'package:fw_resume/data.dart';
@@ -20,9 +21,19 @@ class MyApp extends StatelessWidget {
       title: 'Andrew: flutter dev',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        fontFamily: 'gs',
+        // fontFamily: 'gs',
+
         textTheme: TextTheme(
-          title: TextStyle(fontFamily: 'ss'),
+          title: TextStyle(
+              fontFamily: 'ss', fontSize: 36.0, color: Colors.grey[400]),
+          body1: TextStyle(
+              fontFamily: 'ss', fontSize: 20.0, color: Colors.grey[400]),
+          body2: TextStyle(
+              fontFamily: 'ss', fontSize: 24.0, color: Colors.grey[400]),
+          button: TextStyle(
+              fontFamily: 'ss', fontSize: 28.0, color: Colors.grey[400]),
+          subtitle: TextStyle(
+              fontFamily: 'ss', fontSize: 26.0, color: Colors.grey[400]),
         ),
       ),
       routes: {
@@ -41,7 +52,7 @@ class MyApp extends StatelessWidget {
 }
 
 class ScreenBuilder extends StatelessWidget {
-  static const double smallWidth = 768.0;
+  static const double smallWidth = 800.0;
   static const double hugeWidth = 1024.0;
 
   @override
@@ -50,7 +61,7 @@ class ScreenBuilder extends StatelessWidget {
     final baseSize =
         (mediaQuery.size.width > hugeWidth) ? hugeWidth : mediaQuery.size.width;
     final scale = baseSize / hugeWidth;
-    final fontScale = (baseSize < smallWidth) ? 2.0 : 1.0;
+    final fontScale = (baseSize < smallWidth) ? 1.5 : 1.0;
     final orientation = mediaQuery.orientation;
 
     return ScreenParams(
@@ -91,30 +102,78 @@ class ResumePage1 extends StatelessWidget {
   Widget build(BuildContext context) {
     final params = ScreenParams.of(context);
     return Container(
-      // decoration: BoxDecoration(
-      // image: DecorationImage(
-      //     image: AssetImage('image/back.png'), fit: BoxFit.cover)),
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('image/code_back.png'), fit: BoxFit.cover)),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: NestedScrollView(
-          headerSliverBuilder: (context, scrolled) {
-            return <Widget>[
-              SliverPersistentHeader(
-                delegate: _SliverHeaderDelegate(
-                    baseSize: params.baseSize, screenScale: params.scale),
-                pinned: true,
-              )
-            ];
-          },
-          body: ListView.builder(
-            itemCount: 20,
-            itemBuilder: (context, index) => Container(
-                  height: 200.0,
-                  // color: Colors.white,
+          backgroundColor: Colors.transparent,
+          body: NestedScrollView(
+            headerSliverBuilder: (context, scrolled) {
+              return <Widget>[
+                SliverPersistentHeader(
+                  delegate: _SliverHeaderDelegate(
+                      baseSize: params.baseSize, screenScale: params.scale),
+                  pinned: true,
+                )
+              ];
+            },
+            body: SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.symmetric(
+                    horizontal: 30.0 * params.scale,
+                    vertical: 30.0 * params.scale),
+                height: 1400.0,
+                decoration: BoxDecoration(
+                    color: Colors.grey[800].withOpacity(.85),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(50.0 * params.scale),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                          offset:
+                              Offset(4.0 * params.scale, 4.0 * params.scale),
+                          color: Colors.black.withOpacity(0.5),
+                          blurRadius: 16.0 * params.scale)
+                    ]),
+                child: Column(
+                  children: <Widget>[
+                    Text('some text'),
+                  ],
                 ),
+                //TODO: blur not impl yet by flutter_web_ui/ui.dart
+                // child: Padding(
+                //   padding:
+                //       const EdgeInsets.only(left: 12.0, bottom: 8.0, right: 12.0),
+                //   child: BackdropFilter(
+                //       filter: ui.ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                //       child: Text('Some text')),
+                // ),
+              ),
+            ),
           ),
-        ),
-      ),
+          floatingActionButton: IconButton(
+            iconSize: 80.0 * params.scale * params.fontScale,
+            icon: Icon(
+              icons.Icons.telegram,
+              color: Colors.blue[600],
+              // size: 80.0 * params.scale * params.fontScale
+            ),
+            onPressed: () => html.window.open('https://t.me/AndX2', 'Telegram'),
+          )
+          // FloatingActionButton(
+          // elevation: 8.0 * params.scale,
+          // isExtended: true,
+          // child: Icon(icons.Icons.telegram,
+          //     color: Colors.green[500],
+          //     size: 60,
+
+          //     // 80.0 * params.scale * params.fontScale
+          //     ),
+          //   onPressed: () {
+          //     // html.window.open('https://t.me/AndX2', 'Telegram');
+          //   },
+          // ),
+          ),
     );
   }
 }
@@ -130,31 +189,84 @@ class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   final double baseSize;
   final double screenScale;
   _SliverHeaderDelegate({this.baseSize, this.screenScale}) {
-    this._maxHeight = .5 * baseSize / screenScale;
-    this._minHeight = .1 * baseSize / screenScale;
+    this._maxHeight = .5 * baseSize;
+    this._minHeight = .1 * baseSize;
   }
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return LayoutBuilder(builder: (context, cons) {
       final params = ScreenParams.of(context);
-      final shrinkScale = (cons.maxHeight - _minHeight * screenScale) /
-          ((_maxHeight - _minHeight) * screenScale);
-      // print(params.scale);
+      final shrinkScale =
+          (cons.maxHeight - _minHeight) / ((_maxHeight - _minHeight));
+      // print(cons.maxHeight * shrinkScale);
       return Stack(children: <Widget>[
         Positioned.fill(
-          child: ClipPath(
-            clipper: BarClipper(),
-            child: Container(
-              color: Colors.blue,
-            ),
+          child: Stack(
+            children: <Widget>[
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: BarShadowPainter(
+                      shrinkScale: shrinkScale,
+                      color: Colors.black,
+                      elevation: 8.0 * params.scale),
+                ),
+              ),
+              ClipPath(
+                clipper: BarClipper(shrinkScale: shrinkScale),
+                child: Container(
+                  color: Color(0xFF215796),
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned.fill(
+                        left: ((32.0 + 16.0) * params.scale + cons.maxHeight) *
+                                (1 - shrinkScale) +
+                            48.0 * shrinkScale * params.scale,
+                        top: 4.0 * params.scale * (1 - shrinkScale),
+                        bottom: cons.maxHeight * .4 * shrinkScale,
+                        // right: (cons.maxWidth * (1.0 + avatarWidth)) / 2.0,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Spacer(flex: 5),
+                            Text(
+                              'Andrew',
+                              style: Theme.of(context).textTheme.title.apply(
+                                  fontSizeFactor:
+                                      params.fontScale * params.scale),
+                            ),
+                            Spacer(flex: 5),
+                            Text(
+                              'dart',
+                              style: Theme.of(context).textTheme.title.apply(
+                                  fontSizeFactor:
+                                      params.fontScale * params.scale),
+                            ),
+                            Spacer(flex: 5),
+                            Text(
+                              'developer',
+                              style: Theme.of(context).textTheme.title.apply(
+                                  fontSizeFactor:
+                                      params.fontScale * params.scale),
+                            ),
+                            Spacer(flex: 5 + (100 * (1 - shrinkScale)).floor()),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(
-              bottom: cons.maxHeight * .3,
-              left: cons.maxWidth * avatarLeftPadding,
-              right: cons.maxWidth * (1.0 - avatarWidth - avatarLeftPadding)),
+        Positioned.fill(
+          top: (cons.maxHeight - cons.maxWidth * avatarWidth) * shrinkScale,
+          left: (cons.maxWidth * (1 - avatarWidth) / 2) * shrinkScale +
+              (32.0 * params.scale) * (1 - shrinkScale),
+          right: (cons.maxWidth * (1 - avatarWidth) / 2) * shrinkScale +
+              (cons.maxWidth - 32.0 * params.scale - cons.maxHeight) *
+                  (1 - shrinkScale),
           child: Pentagon(
             color: Colors.deepOrange,
             shadowColor: Colors.black,
@@ -172,10 +284,10 @@ class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => _maxHeight * screenScale;
+  double get maxExtent => _maxHeight;
 
   @override
-  double get minExtent => _minHeight * screenScale;
+  double get minExtent => _minHeight;
 
   @override
   bool shouldRebuild(_SliverHeaderDelegate oldDelegate) {
@@ -183,22 +295,45 @@ class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
+class BarShadowPainter extends CustomPainter {
+  final double elevation;
+  final Color color;
+  final double shrinkScale;
+  BarShadowPainter(
+      {@required this.shrinkScale,
+      @required this.color,
+      @required this.elevation});
+  @override
+  void paint(Canvas canvas, Size size) {
+    final startHeight = (.1 + .2 * shrinkScale) * size.width;
+    final path = Path();
+    path.lineTo(.0, startHeight);
+    path.quadraticBezierTo(size.width / 2.0,
+        size.width * .45 * (.1 + shrinkScale), size.width, startHeight);
+    path.lineTo(size.width, .0);
+    path.close();
+    canvas.drawShadow(path, color, elevation, true);
+  }
+
+  @override
+  bool shouldRepaint(BarShadowPainter oldDelegate) {
+    return true;
+  }
+}
+
 class BarClipper extends CustomClipper<Path> {
   final curveBarHeight = .25;
   final curveBarWidth = .8;
   final leftPadding = .25;
+  final shrinkScale;
+  BarClipper({@required this.shrinkScale});
   @override
   Path getClip(Size size) {
+    final startHeight = (.1 + .2 * shrinkScale) * size.width;
     final path = Path();
-    path.moveTo(size.width * leftPadding, .0);
-    path.lineTo(size.width * leftPadding, (1.0 - curveBarHeight) * size.height);
-    path.lineTo(size.width * curveBarWidth, size.height);
-    path.lineTo(
-        size.width,
-        (1.0 -
-                curveBarHeight *
-                    ((1 - curveBarWidth) / (curveBarWidth - leftPadding))) *
-            size.height);
+    path.lineTo(.0, startHeight);
+    path.quadraticBezierTo(size.width / 2.0,
+        size.width * .45 * (.1 + shrinkScale), size.width, startHeight);
     path.lineTo(size.width, .0);
     path.close();
     return path;
