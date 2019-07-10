@@ -9,8 +9,10 @@ import 'dart:html';
 
 import 'package:fw_resume/data.dart';
 import 'package:fw_resume/widget/pentagon.dart';
+// import 'package:fw_resume/widget/pentagon_outline.dart';
 
 import 'icons.dart' as icons;
+import 'widget/bracket.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,20 +22,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Andrew: flutter dev',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
         // fontFamily: 'gs',
 
         textTheme: TextTheme(
           title: TextStyle(
-              fontFamily: 'ss', fontSize: 36.0, color: Colors.grey[400]),
+              fontFamily: 'ss', fontSize: 36.0, color: Colors.grey[300]),
           body1: TextStyle(
-              fontFamily: 'ss', fontSize: 20.0, color: Colors.grey[400]),
+              fontFamily: 'ss', fontSize: 18.0, color: Colors.grey[300]),
           body2: TextStyle(
-              fontFamily: 'ss', fontSize: 24.0, color: Colors.grey[400]),
+              fontFamily: 'ss', fontSize: 24.0, color: Colors.grey[300]),
           button: TextStyle(
-              fontFamily: 'ss', fontSize: 28.0, color: Colors.grey[400]),
+              fontFamily: 'ss', fontSize: 28.0, color: Colors.grey[300]),
           subtitle: TextStyle(
-              fontFamily: 'ss', fontSize: 26.0, color: Colors.grey[400]),
+              fontFamily: 'ss', fontSize: 26.0, color: Colors.grey[300]),
         ),
       ),
       routes: {
@@ -122,7 +124,7 @@ class ResumePage1 extends StatelessWidget {
                 margin: EdgeInsets.symmetric(
                     horizontal: 30.0 * params.scale,
                     vertical: 30.0 * params.scale),
-                height: 1400.0,
+                // height: 1400.0,
                 decoration: BoxDecoration(
                     color: Colors.grey[800].withOpacity(.85),
                     borderRadius: BorderRadius.all(
@@ -135,11 +137,6 @@ class ResumePage1 extends StatelessWidget {
                           color: Colors.black.withOpacity(0.5),
                           blurRadius: 16.0 * params.scale)
                     ]),
-                child: Column(
-                  children: <Widget>[
-                    Text('some text'),
-                  ],
-                ),
                 //TODO: blur not impl yet by flutter_web_ui/ui.dart
                 // child: Padding(
                 //   padding:
@@ -148,6 +145,41 @@ class ResumePage1 extends StatelessWidget {
                 //       filter: ui.ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
                 //       child: Text('Some text')),
                 // ),
+                child: Column(
+                  children: <Widget>[
+                    BodyCaptionWidget(
+                      params: params,
+                      name: 'about',
+                      iconData: icons.Icons.bolt,
+                    ),
+                    BodyAboutBlock(params: params),
+                    SizedBox(height: 30.0 * params.scale),
+                    BodyCaptionWidget(
+                      params: params,
+                      name: 'skills',
+                      iconData: icons.Icons.brief,
+                    ),
+                    BodySkillsBlock(params: params),
+                    SizedBox(height: 30.0 * params.scale),
+                    BodyCaptionWidget(
+                      params: params,
+                      name: 'education',
+                      iconData: icons.Icons.book,
+                    ),
+                    SizedBox(height: 30.0 * params.scale),
+                    BodyCaptionWidget(
+                      params: params,
+                      name: 'achivements',
+                      iconData: icons.Icons.achive,
+                    ),
+                    SizedBox(height: 30.0 * params.scale),
+                    BodyCaptionWidget(
+                      params: params,
+                      name: 'public demo',
+                      iconData: icons.Icons.gitFork,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -156,24 +188,266 @@ class ResumePage1 extends StatelessWidget {
             icon: Icon(
               icons.Icons.telegram,
               color: Colors.blue[600],
-              // size: 80.0 * params.scale * params.fontScale
             ),
             onPressed: () => html.window.open('https://t.me/AndX2', 'Telegram'),
-          )
-          // FloatingActionButton(
-          // elevation: 8.0 * params.scale,
-          // isExtended: true,
-          // child: Icon(icons.Icons.telegram,
-          //     color: Colors.green[500],
-          //     size: 60,
+          )),
+    );
+  }
+}
 
-          //     // 80.0 * params.scale * params.fontScale
-          //     ),
-          //   onPressed: () {
-          //     // html.window.open('https://t.me/AndX2', 'Telegram');
-          //   },
-          // ),
+class BodySkillsBlock extends StatelessWidget {
+  const BodySkillsBlock({
+    Key key,
+    @required this.params,
+  }) : super(key: key);
+
+  final ScreenParams params;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 30.0 * params.scale),
+      height: 300.0 * params.scale,
+      width: double.infinity,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: skills.length,
+        itemBuilder: (context, index) {
+          return Padding(
+              padding: EdgeInsets.all(16.0 * params.scale),
+              child: AspectRatio(
+                aspectRatio: 0.7,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40.0 * params.scale),
+                          bottomRight: Radius.circular(40.0 * params.scale)),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black26,
+                            offset:
+                                Offset(8.0 * params.scale, 8.0 * params.scale),
+                            blurRadius: 5.0 * params.scale)
+                      ],
+                      ),
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: Stack(
+                          children: <Widget>[
+                            AspectRatio(aspectRatio: 1.0,
+                              child: Padding(
+                                padding: EdgeInsets.all(40.0 * params.scale),
+                                child: Image.asset(
+                                  skills[index]['image'],
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                            AspectRatio(aspectRatio: 1.0,
+                              child: Padding(
+                                padding: EdgeInsets.all(20.0 * params.scale),
+                                child: CustomPaint(
+                                  painter: SkillArcPainter(
+                                      value: skills[index]['rate'],
+                                      color: Color(
+                                          int.parse(skills[index]['color'])),
+                                      screenScale: params.scale),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Text(
+                        skills[index]['name'],
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.body1.apply(
+                            color: Colors.grey[700],
+                            fontSizeFactor: params.fontScale * params.scale),
+                      ),
+                      SizedBox(
+                        height: 16.0 * params.scale,
+                      )
+                    ],
+                  ),
+                ),
+              ));
+        },
+      ),
+    );
+  }
+}
+
+class BodyAboutBlock extends StatelessWidget {
+  const BodyAboutBlock({
+    Key key,
+    @required this.params,
+  }) : super(key: key);
+
+  final ScreenParams params;
+
+  @override
+  Widget build(BuildContext context) {
+    return Table(
+      children: [
+        TableRow(children: [
+          TableCell(
+            child: Text(
+              'name: ',
+              textAlign: TextAlign.right,
+              style: Theme.of(context)
+                  .textTheme
+                  .body1
+                  .apply(fontSizeFactor: params.fontScale * params.scale),
+            ),
           ),
+          TableCell(
+            child: Text(
+              'Andrew',
+              textAlign: TextAlign.left,
+              style: Theme.of(context)
+                  .textTheme
+                  .body1
+                  .apply(fontSizeFactor: params.fontScale * params.scale),
+            ),
+          )
+        ]),
+        TableRow(children: [
+          TableCell(
+            child: Text(
+              'age: ',
+              textAlign: TextAlign.right,
+              style: Theme.of(context)
+                  .textTheme
+                  .body1
+                  .apply(fontSizeFactor: params.fontScale * params.scale),
+            ),
+          ),
+          TableCell(
+            child: Text(
+              '${(DateTime.now().difference(DateTime(1982, 10, 12)).inDays / 365).floor().toString()} years',
+              textAlign: TextAlign.left,
+              style: Theme.of(context)
+                  .textTheme
+                  .body1
+                  .apply(fontSizeFactor: params.fontScale * params.scale),
+            ),
+          )
+        ]),
+        TableRow(children: [
+          TableCell(
+            child: Text(
+              'expirience: ',
+              textAlign: TextAlign.right,
+              style: Theme.of(context)
+                  .textTheme
+                  .body1
+                  .apply(fontSizeFactor: params.fontScale * params.scale),
+            ),
+          ),
+          TableCell(
+            child: Text(
+              '${(DateTime.now().difference(DateTime(2000, 6)).inDays / 365).floor().toString()} years',
+              textAlign: TextAlign.left,
+              style: Theme.of(context)
+                  .textTheme
+                  .body1
+                  .apply(fontSizeFactor: params.fontScale * params.scale),
+            ),
+          )
+        ]),
+        TableRow(children: [
+          TableCell(
+            child: Text(
+              'mobile dev: ',
+              textAlign: TextAlign.right,
+              style: Theme.of(context)
+                  .textTheme
+                  .body1
+                  .apply(fontSizeFactor: params.fontScale * params.scale),
+            ),
+          ),
+          TableCell(
+            child: Text(
+              '${(DateTime.now().difference(DateTime(2014, 9)).inDays / 365).floor().toString()} years',
+              textAlign: TextAlign.left,
+              style: Theme.of(context)
+                  .textTheme
+                  .body1
+                  .apply(fontSizeFactor: params.fontScale * params.scale),
+            ),
+          )
+        ]),
+      ],
+    );
+  }
+}
+
+class BodyCaptionWidget extends StatelessWidget {
+  const BodyCaptionWidget({
+    Key key,
+    @required this.params,
+    @required this.name,
+    @required this.iconData,
+  }) : super(key: key);
+
+  final ScreenParams params;
+  final String name;
+  final IconData iconData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 130.0 * params.scale,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Bracket(
+              color: Colors.grey[400],
+              width: 3.0 * params.scale,
+              type: BracketType.left,
+            ),
+          ),
+          Column(
+            children: <Widget>[
+              Container(
+                height: 80.0 * params.scale,
+                width: 80.0 * params.scale,
+                child: Pentagon(
+                    color: Colors.grey[400],
+                    shadowColor: Colors.black,
+                    elevation: 4.0 * params.scale,
+                    borderWidth: 3.0 * params.scale,
+                    radius: 30.0 * params.scale,
+                    child: Center(
+                        child: Icon(
+                      iconData,
+                      size: 50.0 * params.scale,
+                    ))),
+              ),
+              Text(
+                name,
+                style: Theme.of(context)
+                    .textTheme
+                    .body2
+                    .apply(fontSizeFactor: params.fontScale * params.scale),
+              ),
+            ],
+          ),
+          Expanded(
+            flex: 1,
+            child: Bracket(
+              color: Colors.grey[400],
+              width: 3.0 * params.scale,
+              type: BracketType.rigth,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -711,7 +985,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     return LayoutBuilder(builder: (context, cons) {
       final shrinkScale = (cons.maxHeight - minHeight * screenScale) /
           ((maxHeight - minHeight) * screenScale);
-      print(shrinkScale);
+      // print(shrinkScale);
       return Stack(
         children: <Widget>[
           ClipPath(
@@ -1003,7 +1277,7 @@ class MainPage extends StatelessWidget {
                           padding: EdgeInsets.only(top: baseSize * 0.35),
                           child: SingleChildScrollView(
                             controller: _controller,
-                            child: new SkillColumnWidget(
+                            child: SkillColumnWidget(
                                 screenScale: screenScale,
                                 controller: _controller),
                           ),
@@ -1371,7 +1645,8 @@ class SkillWidget extends StatelessWidget {
   final int gridColumnCount;
   final Map<String, dynamic> skill;
 
-  SkillWidget({this.screenScale, this.skill, this.gridColumnCount});
+  SkillWidget(
+      {this.screenScale = 1.0, @required this.skill, this.gridColumnCount = 4});
 
   @override
   Widget build(BuildContext context) {

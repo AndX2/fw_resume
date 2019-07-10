@@ -11,4 +11,6 @@ class Icons {
   static const IconData achive = IconData(0xf091, fontFamily: 'fa');
   static const IconData email = IconData(0xf0e0, fontFamily: 'fa');
   static const IconData telegram = IconData(0xf2c6, fontFamily: 'fa');
+  static const IconData bolt = IconData(0xf0e7, fontFamily: 'fa');
+  static const IconData gitFork = IconData(0xf09b, fontFamily: 'fa');
 }
