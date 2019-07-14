@@ -13,4 +13,12 @@ class Icons {
   static const IconData telegram = IconData(0xf2c6, fontFamily: 'fa');
   static const IconData bolt = IconData(0xf0e7, fontFamily: 'fa');
   static const IconData gitFork = IconData(0xf09b, fontFamily: 'fa');
+  static const IconData fileCode = IconData(0xf1c9, fontFamily: 'fa');
+  static const IconData handShake = IconData(0xf2b5, fontFamily: 'fa');
+  static const IconData handRight = IconData(0xf0a4, fontFamily: 'fa');
+  static const IconData money = IconData(0xf0d6, fontFamily: 'fa');
+
+  static fromUnicode(int code) {
+    return IconData(code, fontFamily: 'fa');
+  }
 }

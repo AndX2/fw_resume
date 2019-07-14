@@ -62,7 +62,7 @@ class ScreenBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    print('PixelRatio: ${mediaQuery.devicePixelRatio}');
+    // print('PixelRatio: ${mediaQuery.devicePixelRatio}');
     final baseSize =
         (mediaQuery.size.width > hugeWidth) ? hugeWidth : mediaQuery.size.width;
     final scale = baseSize / hugeWidth;
@@ -183,6 +183,79 @@ class ResumePage1 extends StatelessWidget {
                       name: 'public demo',
                       iconData: icons.Icons.gitFork,
                     ),
+                    BodyDemoBlock(params: params),
+                    // ),
+                    SizedBox(height: 30.0 * params.scale),
+                    BodyCaptionWidget(
+                      params: params,
+                      name: 'expectations',
+                      iconData: icons.Icons.handRight,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 32.0 * params.scale,
+                          right: 32.0 * params.scale),
+                      child: Wrap(
+                        children: <Widget>[
+                          ...offerExp.map((item) => Card(
+                              elevation: 8.0 * params.scale,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    width: 400.0 * params.scale,
+                                    color: Colors.orange,
+                                    child: Row(
+                                      children: <Widget>[
+                                        SizedBox(width: 32.0 * params.scale),
+                                        Icon(
+                                          icons.Icons.fromUnicode(item['icon']),
+                                          color: Colors.grey[700],
+                                          size: 40.0 * params.scale,
+                                        ),
+                                        SizedBox(width: 32.0 * params.scale),
+                                        Text(
+                                          item['title'],
+                                          textAlign: TextAlign.left,
+                                          maxLines: 3,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .caption
+                                              .apply(
+                                                  color: Colors.grey[700],
+                                                  fontSizeFactor:
+                                                      params.fontScale *
+                                                          params.scale),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 32.0 * params.scale),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      SizedBox(width: 32.0 * params.scale),
+                                      Text(
+                                        item['value'],
+                                        textAlign: TextAlign.left,
+                                        maxLines: 3,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption
+                                            .apply(
+                                                color: Colors.grey[700],
+                                                fontSizeFactor:
+                                                    params.fontScale *
+                                                        params.scale),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 32.0 * params.scale),
+                                ],
+                              ))),
+                        ],
+                      ),
+                    ),
                     SizedBox(height: 30.0 * params.scale),
                   ],
                 ),
@@ -197,6 +270,69 @@ class ResumePage1 extends StatelessWidget {
             ),
             onPressed: () => html.window.open('https://t.me/AndX2', 'Telegram'),
           )),
+    );
+  }
+}
+
+class BodyDemoBlock extends StatelessWidget {
+  const BodyDemoBlock({
+    Key key,
+    @required this.params,
+  }) : super(key: key);
+
+  final ScreenParams params;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      shrinkWrap: true,
+      padding: EdgeInsets.only(
+          left: 32.0 * params.scale, right: 32.0 * params.scale),
+      itemCount: demo.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          childAspectRatio: 3, crossAxisCount: 2),
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () =>
+              html.window.open(demo[index]['link'], demo[index]['linkName']),
+          child: Container(
+              margin: EdgeInsets.all(16.0 * params.scale),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(8.0 * params.scale, 8.0 * params.scale),
+                      blurRadius: 5.0 * params.scale)
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(width: 32.0 * params.scale),
+                  Icon(
+                    icons.Icons.fromUnicode(demo[index]['icon']),
+                    color: Colors.grey[700],
+                    size: 40.0 * params.scale,
+                  ),
+                  SizedBox(width: 32.0 * params.scale),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        demo[index]['value'],
+                        textAlign: TextAlign.left,
+                        maxLines: 3,
+                        style: Theme.of(context).textTheme.caption.apply(
+                            color: Colors.grey[700],
+                            fontSizeFactor: params.fontScale * params.scale),
+                      ),
+                    ],
+                  ),
+                ],
+              )),
+        );
+      },
     );
   }
 }

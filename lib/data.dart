@@ -87,4 +87,46 @@ const achive = [
   },
 ];
 
-const offerExp = [{}];
+const demo = [
+  {
+    'icon': 0xf1c9,
+    'value': 'This code',
+    'link': 'https://github.com/AndX2/fw_resume',
+    'linkName': 'https://github.com/AndX2/fw_resume',
+  },
+  {
+    'icon': 0xf0ac,
+    'value': 'This demo',
+    'link': 'https://andx2.github.io/#/',
+    'linkName': 'https://andx2.github.io',
+  },
+  {
+    'icon': 0xf166,
+    'value': 'This coding stream',
+    'link': 'https://www.youtube.com',
+    'linkName': 'https://www.youtube.com',
+  },
+];
+
+const offerExp = [
+  {
+    'icon': 0xf0d6,
+    'title': 'salary',
+    'value': 'on demand',
+  },
+  {
+    'icon': 0xf051,
+    'title': 'landing time',
+    'value': '3...6 month\nemployer office',
+  },
+  {
+    'icon': 0xf164,
+    'title': 'work mode',
+    'value': 'remote',
+  },
+  {
+    'icon': 0xf05e,
+    'title': 'ban',
+    'value': '~cripto\n~uberKiller\nAzino777',
+  },
+];
