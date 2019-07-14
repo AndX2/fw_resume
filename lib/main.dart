@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter_web/material.dart';
 import 'package:flutter_web/painting.dart';
 import 'package:flutter_web/widgets.dart';
-import 'package:flutter_web/widgets.dart' as prefix0;
 // import 'package:flutter_web_ui/ui.dart' as ui;
 import 'dart:html';
 
@@ -63,6 +62,7 @@ class ScreenBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
+    print('PixelRatio: ${mediaQuery.devicePixelRatio}');
     final baseSize =
         (mediaQuery.size.width > hugeWidth) ? hugeWidth : mediaQuery.size.width;
     final scale = baseSize / hugeWidth;
@@ -176,12 +176,14 @@ class ResumePage1 extends StatelessWidget {
                       name: 'achivements',
                       iconData: icons.Icons.achive,
                     ),
+                    BodyAchiveBlock(params: params),
                     SizedBox(height: 30.0 * params.scale),
                     BodyCaptionWidget(
                       params: params,
                       name: 'public demo',
                       iconData: icons.Icons.gitFork,
                     ),
+                    SizedBox(height: 30.0 * params.scale),
                   ],
                 ),
               ),
@@ -199,6 +201,94 @@ class ResumePage1 extends StatelessWidget {
   }
 }
 
+class BodyAchiveBlock extends StatelessWidget {
+  const BodyAchiveBlock({
+    Key key,
+    @required this.params,
+  }) : super(key: key);
+
+  final ScreenParams params;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 300.0 * params.scale,
+      width: double.infinity,
+      child: PageView.builder(
+        controller: PageController(viewportFraction: 0.8, initialPage: 0),
+        itemCount: achive.length,
+        itemBuilder: (context, index) => Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: 32.0 * params.scale, vertical: 8.0 * params.scale),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40.0 * params.scale),
+                  bottomRight: Radius.circular(40.0 * params.scale)),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black26,
+                    offset: Offset(8.0 * params.scale, 8.0 * params.scale),
+                    blurRadius: 5.0 * params.scale)
+              ],
+            ),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  flex: 2,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40.0 * params.scale),
+                      ),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage(
+                          achive[index]['image'],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: 32.0 * params.scale,
+                        right: 32.0 * params.scale,
+                        top: 24.0 * params.scale),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          achive[index]['time'],
+                          textAlign: TextAlign.left,
+                          style: Theme.of(context).textTheme.caption.apply(
+                              color: Colors.grey[700],
+                              fontSizeFactor: params.fontScale * params.scale),
+                        ),
+                        SizedBox(height: 12.0 * params.scale),
+                        Text(
+                          achive[index]['value'],
+                          textAlign: TextAlign.left,
+                          style: Theme.of(context).textTheme.caption.apply(
+                              color: Colors.grey[700],
+                              fontSizeFactor: params.fontScale * params.scale),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class BodyEduBlock extends StatelessWidget {
   const BodyEduBlock({
     Key key,
@@ -210,18 +300,17 @@ class BodyEduBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding:
-          EdgeInsets.symmetric(horizontal: 30.0 * params.scale),
+      // padding: EdgeInsets.symmetric(horizontal: 30.0 * params.scale),
       height: 300.0 * params.scale,
       width: double.infinity,
       child: ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 30.0 * params.scale),
         scrollDirection: Axis.horizontal,
         itemCount: educations.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () => html.window.open(
-                educations[index]['link'],
-                educations[index]['linkName']),
+            onTap: () => html.window
+                .open(educations[index]['link'], educations[index]['linkName']),
             child: Padding(
               padding: EdgeInsets.all(16.0 * params.scale),
               child: AspectRatio(
@@ -229,84 +318,70 @@ class BodyEduBlock extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     Container(
-                      margin: EdgeInsets.only(
-                          left: 50.0 * params.scale),
+                      margin: EdgeInsets.only(left: 50.0 * params.scale),
                       padding: EdgeInsets.only(
-                          left: 170.0 * params.scale,
-                          top: 24.0 * params.scale),
-                          width: double.infinity,
+                          left: 170.0 * params.scale, top: 24.0 * params.scale),
+                      width: double.infinity,
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(
-                                40.0 * params.scale),
-                            bottomRight: Radius.circular(
-                                40.0 * params.scale)),
+                            topLeft: Radius.circular(40.0 * params.scale),
+                            bottomRight: Radius.circular(40.0 * params.scale)),
                         boxShadow: [
                           BoxShadow(
                               color: Colors.black26,
-                              offset: Offset(8.0 * params.scale,
-                                  8.0 * params.scale),
+                              offset: Offset(
+                                  8.0 * params.scale, 8.0 * params.scale),
                               blurRadius: 5.0 * params.scale)
                         ],
                       ),
                       child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
                             educations[index]['time'],
                             textAlign: TextAlign.left,
-                            style: Theme.of(context)
-                                .textTheme
-                                .caption
-                                .apply(
-                                    color: Colors.grey[700],
-                                    fontSizeFactor:
-                                        params.fontScale *
-                                            params.scale),
+                            style: Theme.of(context).textTheme.caption.apply(
+                                color: Colors.grey[700],
+                                fontSizeFactor:
+                                    params.fontScale * params.scale),
                           ),
                           SizedBox(height: 12.0 * params.scale),
                           Text(
                             educations[index]['value'],
                             textAlign: TextAlign.left,
-                            style: Theme.of(context)
-                                .textTheme
-                                .caption
-                                .apply(
-                                    color: Colors.grey[700],
-                                    fontSizeFactor:
-                                        params.fontScale *
-                                            params.scale),
+                            style: Theme.of(context).textTheme.caption.apply(
+                                color: Colors.grey[700],
+                                fontSizeFactor:
+                                    params.fontScale * params.scale),
                           ),
                           SizedBox(height: 12.0 * params.scale),
                           LinkWidget(
                             screenScale: params.scale,
                             text: educations[index]['linkName'],
                             url: educations[index]['link'],
-                            fontSize: 20.0 * params.scale* params.fontScale,
+                            fontSize:
+                                Theme.of(context).textTheme.caption.fontSize *
+                                    params.fontScale,
                           )
                         ],
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(
-                          top: 50.0 * params.scale),
+                      margin: EdgeInsets.only(top: 50.0 * params.scale),
                       height: 160.0 * params.scale,
                       width: 200.0 * params.scale,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(
-                            Radius.circular(
-                                20.0 * params.scale)),
+                            Radius.circular(20.0 * params.scale)),
                         image: DecorationImage(
-                            image: AssetImage(
-                                educations[index]['image']),
+                            image: AssetImage(educations[index]['image']),
                             fit: BoxFit.cover),
                         boxShadow: [
                           BoxShadow(
                               color: Colors.black26,
-                              offset: Offset(4.0 * params.scale,
-                                  4.0 * params.scale),
+                              offset: Offset(
+                                  4.0 * params.scale, 4.0 * params.scale),
                               blurRadius: 2.0 * params.scale)
                         ],
                       ),
@@ -337,10 +412,11 @@ class BodySkillsBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30.0 * params.scale),
+      // padding: EdgeInsets.symmetric(horizontal: 30.0 * params.scale),
       height: 300.0 * params.scale,
       width: double.infinity,
       child: ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 30.0 * params.scale),
         scrollDirection: Axis.horizontal,
         itemCount: skills.length,
         itemBuilder: (context, index) {

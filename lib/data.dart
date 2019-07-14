@@ -2,7 +2,7 @@ const educations = [
   {
     'time': '09.2000...06.2006',
     'value':
-        'Nizhny Novgorod State Technical University \nDesign of technical and technological complexes',
+        'Nizhny Novgorod State Technical University \nDesign of technical and technological complexes \ncode 15.03.02',
     'link': 'https://www.nntu.ru',
     'linkName': 'https://www.nntu.ru',
     'image': 'nntu.png',
@@ -71,12 +71,20 @@ const achive = [
   {
     'time': '06.2000',
     'value':
-        'The first launch of the developed industrial machine automation system'
+        'The first launch of the developed industrial machine automation system',
+    'image': 'pines.jpg'
   },
   {
     'time': '02.2006',
     'value':
-        'The first launch industrial system as a team leader with a full implementation cycle'
+        'The first launch industrial system as a team leader with a full implementation cycle',
+    'image': 'pumps.jpg'
   },
-  {'time': '09.2014', 'value': 'First published on Google Play'},
+  {
+    'time': '09.2014',
+    'value': 'First published on Google Play',
+    'image': 'gp.png'
+  },
 ];
+
+const offerExp = [{}];
