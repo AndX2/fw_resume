@@ -129,22 +129,6 @@ class ResumePage1 extends StatelessWidget {
                     vertical: 30.0 * params.scale),
                 color: Colors.grey[800].withOpacity(.85),
                 elevation: 16.0 * params.scale,
-                //  Container(
-                //   margin: EdgeInsets.symmetric(
-                //       horizontal: 30.0 * params.scale,
-                //       vertical: 30.0 * params.scale),
-                //   decoration: BoxDecoration(
-                //     // color: Colors.grey[800].withOpacity(.85),
-                //     borderRadius: BorderRadius.all(
-                //       Radius.circular(50.0 * params.scale),
-                //     ),
-                //     // boxShadow: [
-                //     //   BoxShadow(
-                //     //       offset: Offset(4.0 * params.scale, 4.0 * params.scale),
-                //     //       color: Colors.black.withOpacity(0.5),
-                //     //       blurRadius: 16.0 * params.scale)
-                //     // ],
-                //   ),
                 //TODO: blur not impl yet by flutter_web_ui/ui.dart
                 // child: Padding(
                 //   padding:
@@ -229,6 +213,8 @@ class BodyExpectBlock extends StatelessWidget {
       padding: EdgeInsets.only(
           left: 32.0 * params.scale, right: 32.0 * params.scale),
       child: Wrap(
+        spacing: 32.0 * params.scale,
+        runSpacing: 32.0 * params.scale,
         children: <Widget>[
           ...offerExp.map((item) => Card(
               elevation: 8.0 * params.scale,
@@ -293,20 +279,25 @@ class BodyDemoBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
+      // scrollDirection: Axis.horizontal,
       shrinkWrap: true,
       padding: EdgeInsets.only(
           left: 32.0 * params.scale, right: 32.0 * params.scale),
       itemCount: demo.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 3, crossAxisCount: 2),
+          mainAxisSpacing: 32.0 * params.scale,
+          crossAxisSpacing: 32.0 * params.scale,
+          childAspectRatio: 3.5,
+          crossAxisCount: 2),
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () =>
               html.window.open(demo[index]['link'], demo[index]['linkName']),
           child: Container(
-              margin: EdgeInsets.all(16.0 * params.scale),
               decoration: BoxDecoration(
                 color: Colors.grey[300],
+                borderRadius:
+                    BorderRadius.all(Radius.circular(4.0 * params.scale)),
                 boxShadow: [
                   BoxShadow(
                       color: Colors.black26,
