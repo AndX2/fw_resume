@@ -123,23 +123,28 @@ class ResumePage1 extends StatelessWidget {
               ];
             },
             body: SingleChildScrollView(
-              child: Container(
+              child: Card(
                 margin: EdgeInsets.symmetric(
                     horizontal: 30.0 * params.scale,
                     vertical: 30.0 * params.scale),
-                // height: 1400.0,
-                decoration: BoxDecoration(
-                    color: Colors.grey[800].withOpacity(.85),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(50.0 * params.scale),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                          offset:
-                              Offset(4.0 * params.scale, 4.0 * params.scale),
-                          color: Colors.black.withOpacity(0.5),
-                          blurRadius: 16.0 * params.scale)
-                    ]),
+                color: Colors.grey[800].withOpacity(.85),
+                elevation: 16.0 * params.scale,
+                //  Container(
+                //   margin: EdgeInsets.symmetric(
+                //       horizontal: 30.0 * params.scale,
+                //       vertical: 30.0 * params.scale),
+                //   decoration: BoxDecoration(
+                //     // color: Colors.grey[800].withOpacity(.85),
+                //     borderRadius: BorderRadius.all(
+                //       Radius.circular(50.0 * params.scale),
+                //     ),
+                //     // boxShadow: [
+                //     //   BoxShadow(
+                //     //       offset: Offset(4.0 * params.scale, 4.0 * params.scale),
+                //     //       color: Colors.black.withOpacity(0.5),
+                //     //       blurRadius: 16.0 * params.scale)
+                //     // ],
+                //   ),
                 //TODO: blur not impl yet by flutter_web_ui/ui.dart
                 // child: Padding(
                 //   padding:
@@ -191,71 +196,7 @@ class ResumePage1 extends StatelessWidget {
                       name: 'expectations',
                       iconData: icons.Icons.handRight,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: 32.0 * params.scale,
-                          right: 32.0 * params.scale),
-                      child: Wrap(
-                        children: <Widget>[
-                          ...offerExp.map((item) => Card(
-                              elevation: 8.0 * params.scale,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    width: 400.0 * params.scale,
-                                    color: Colors.orange,
-                                    child: Row(
-                                      children: <Widget>[
-                                        SizedBox(width: 32.0 * params.scale),
-                                        Icon(
-                                          icons.Icons.fromUnicode(item['icon']),
-                                          color: Colors.grey[700],
-                                          size: 40.0 * params.scale,
-                                        ),
-                                        SizedBox(width: 32.0 * params.scale),
-                                        Text(
-                                          item['title'],
-                                          textAlign: TextAlign.left,
-                                          maxLines: 3,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption
-                                              .apply(
-                                                  color: Colors.grey[700],
-                                                  fontSizeFactor:
-                                                      params.fontScale *
-                                                          params.scale),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: 32.0 * params.scale),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      SizedBox(width: 32.0 * params.scale),
-                                      Text(
-                                        item['value'],
-                                        textAlign: TextAlign.left,
-                                        maxLines: 3,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption
-                                            .apply(
-                                                color: Colors.grey[700],
-                                                fontSizeFactor:
-                                                    params.fontScale *
-                                                        params.scale),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 32.0 * params.scale),
-                                ],
-                              ))),
-                        ],
-                      ),
-                    ),
+                    BodyExpectBlock(params: params),
                     SizedBox(height: 30.0 * params.scale),
                   ],
                 ),
@@ -270,6 +211,73 @@ class ResumePage1 extends StatelessWidget {
             ),
             onPressed: () => html.window.open('https://t.me/AndX2', 'Telegram'),
           )),
+    );
+  }
+}
+
+class BodyExpectBlock extends StatelessWidget {
+  const BodyExpectBlock({
+    Key key,
+    @required this.params,
+  }) : super(key: key);
+
+  final ScreenParams params;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+          left: 32.0 * params.scale, right: 32.0 * params.scale),
+      child: Wrap(
+        children: <Widget>[
+          ...offerExp.map((item) => Card(
+              elevation: 8.0 * params.scale,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: 400.0 * params.scale,
+                    color: Colors.orange,
+                    child: Row(
+                      children: <Widget>[
+                        SizedBox(width: 32.0 * params.scale),
+                        Icon(
+                          icons.Icons.fromUnicode(item['icon']),
+                          color: Colors.grey[700],
+                          size: 40.0 * params.scale,
+                        ),
+                        SizedBox(width: 32.0 * params.scale),
+                        Text(
+                          item['title'],
+                          textAlign: TextAlign.left,
+                          maxLines: 3,
+                          style: Theme.of(context).textTheme.caption.apply(
+                              color: Colors.grey[700],
+                              fontSizeFactor: params.fontScale * params.scale),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 32.0 * params.scale),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      SizedBox(width: 32.0 * params.scale),
+                      Text(
+                        item['value'],
+                        textAlign: TextAlign.left,
+                        maxLines: 3,
+                        style: Theme.of(context).textTheme.caption.apply(
+                            color: Colors.grey[700],
+                            fontSizeFactor: params.fontScale * params.scale),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 32.0 * params.scale),
+                ],
+              ))),
+        ],
+      ),
     );
   }
 }
