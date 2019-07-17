@@ -69,10 +69,9 @@ const skills = [
 
 const achive = [
   {
-    'time': '06.2000',
-    'value':
-        'The first launch of the developed industrial machine automation system',
-    'image': 'pines.jpg'
+    'time': '09.2014',
+    'value': 'First published on Google Play',
+    'image': 'gp.png'
   },
   {
     'time': '02.2006',
@@ -81,9 +80,10 @@ const achive = [
     'image': 'pumps.jpg'
   },
   {
-    'time': '09.2014',
-    'value': 'First published on Google Play',
-    'image': 'gp.png'
+    'time': '06.2000',
+    'value':
+        'The first launch of the developed industrial machine automation system',
+    'image': 'pines.jpg'
   },
 ];
 

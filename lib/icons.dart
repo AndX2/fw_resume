@@ -1,6 +1,6 @@
 import 'package:flutter_web/material.dart';
 
-class Icons {
+abstract class Icons {
   Icons._();
 
   static const IconData tooltip = IconData(0xf293, fontFamily: 'fa');

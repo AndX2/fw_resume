@@ -9,6 +9,7 @@ import 'dart:html';
 
 import 'package:fw_resume/data.dart';
 import 'package:fw_resume/widget/pentagon.dart';
+import 'package:fw_resume/widget/plastic_tab.dart';
 // import 'package:fw_resume/widget/pentagon_outline.dart';
 
 import 'icons.dart' as icons;
@@ -56,26 +57,31 @@ class MyApp extends StatelessWidget {
 }
 
 class ScreenBuilder extends StatelessWidget {
-  static const double smallWidth = 800.0;
-  static const double hugeWidth = 1024.0;
+  static const double SMALL_WIDTH = 768.0;
+  static const double HUGE_WIDTH = 1024.0;
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     // print('PixelRatio: ${mediaQuery.devicePixelRatio}');
-    final baseSize =
-        (mediaQuery.size.width > hugeWidth) ? hugeWidth : mediaQuery.size.width;
-    final scale = baseSize / hugeWidth;
-    final fontScale = (baseSize < smallWidth) ? 1.5 : 1.0;
+    final baseSize = (mediaQuery.size.width > HUGE_WIDTH)
+        ? HUGE_WIDTH
+        : mediaQuery.size.width;
+    final minSize = (mediaQuery.size.width > mediaQuery.size.height)
+        ? mediaQuery.size.height
+        : mediaQuery.size.width;
+    final scale = baseSize / HUGE_WIDTH;
+    final fontScale = (baseSize <= SMALL_WIDTH) ? 1.5 : 1.2;
     final orientation = mediaQuery.orientation;
+    // html.window.console.log(mediaQuery);
 
     return ScreenParams(
       baseSize: baseSize,
       scale: scale,
       fontScale: fontScale,
-      child: (baseSize >= hugeWidth)
-          ? _buildDesk(padding: (mediaQuery.size.width - hugeWidth) / 2)
-          : (baseSize >= 768.0)
+      child: (mediaQuery.size.width > HUGE_WIDTH && minSize >= 600.0)
+          ? _buildDesk(padding: (mediaQuery.size.width - HUGE_WIDTH) / 2)
+          : (minSize >= 768.0)
               ? _buildTablet()
               : (orientation == Orientation.portrait)
                   ? _buildPhonePort()
@@ -84,25 +90,35 @@ class ScreenBuilder extends StatelessWidget {
   }
 
   Widget _buildPhonePort() {
-    return Scaffold(body: ResumePage1());
+    return ModilePage();
   }
 
   Widget _buildPhoneLand() {
-    return Scaffold(body: ResumePage());
+    return ModilePage();
   }
 
   Widget _buildTablet() {
-    return Scaffold(body: ResumePage1());
+    return ModilePage();
   }
 
   Widget _buildDesk({double padding}) {
-    return Padding(
-        padding: EdgeInsets.symmetric(horizontal: padding),
-        child: Card(elevation: 4.0, child: ResumePage()));
+    return Stack(
+      children: <Widget>[
+        Positioned.fill(
+          child: Image.asset(
+            'image/code_back.png',
+            fit: BoxFit.cover,
+          ),
+        ),
+        Padding(
+            padding: EdgeInsets.symmetric(horizontal: padding),
+            child: DesktopPage()),
+      ],
+    );
   }
 }
 
-class ResumePage1 extends StatelessWidget {
+class ModilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final params = ScreenParams.of(context);
@@ -1021,71 +1037,120 @@ class WidthWidget extends StatelessWidget {
             elevation: 4.0,
             margin: EdgeInsets.only(left: 4.0, right: 4.0, bottom: 4.0),
             child: (constraints.maxWidth < 1024.0)
-                ? ResumePage()
+                ? DesktopPage()
                 : Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: (constraints.maxWidth - 1024.0) / 2),
-                    child: Card(elevation: 4.0, child: ResumePage()),
+                    child: Card(elevation: 4.0, child: DesktopPage()),
                   ));
       },
     );
   }
 }
 
-class ResumePage extends StatelessWidget {
+class DesktopPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      final double baseSize = constraints.maxWidth;
-      final double screenScale = baseSize / 1024.0;
-      final scrollController = ScrollController();
-      return Stack(children: [
-        Positioned.fill(
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: <Color>[Colors.grey[200], Colors.grey[500]],
-                  stops: [0.3, 0.8]),
-            ),
-          ),
-        ),
-        NestedScrollView(
-          headerSliverBuilder: (context, scrolled) {
-            return <Widget>[
-              SliverPersistentHeader(
-                delegate: _SliverAppBarDelegate(
-                    baseSize: baseSize, screenScale: screenScale),
-                pinned: true,
-              ),
-            ];
-          },
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.only(left: baseSize * .3),
-              child: SkillColumnWidget(
-                screenScale: screenScale,
-                controller: scrollController,
-              ),
-            ),
-          ),
-        ),
-        Container(
-          width: baseSize * .3,
-          decoration: BoxDecoration(
-              color: Colors.grey[500].withOpacity(.7),
-              boxShadow: [
-                BoxShadow(
-                    offset: Offset(5.0 * screenScale, 0.0),
-                    color: Colors.black38,
-                    blurRadius: 5.0 * screenScale)
+    final params = ScreenParams.of(context);
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 4.0,
+        color: Colors.grey[700].withOpacity(0.85),
+        child: Row(
+          children: <Widget>[
+            Container(
+              width: params.baseSize * .4,
+              height: 2000.0,
+              // color: Color(0xFF215796),
+              child: Column(children: [
+                Stack(
+                  children: <Widget>[
+                    Positioned.fill(child: PlasticTab()),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        SizedBox(height: 50.0),
+                        Container(
+                          padding:
+                              EdgeInsets.only(right: params.baseSize * .05),
+                          width: params.baseSize * .3,
+                          height: params.baseSize * .3,
+                          child: Pentagon(
+                            color: Colors.deepOrange,
+                            shadowColor: Colors.black,
+                            elevation: 4.0 * params.scale,
+                            borderWidth: 3.0 * params.scale,
+                            radius: 50.0 * params.scale,
+                            child: Image.asset(
+                              'image/face_.jpg',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 50.0),
+                        BodyAboutBlock(params: params),
+                        SizedBox(height: 50.0),
+                      ],
+                    ),
+                  ],
+                ),
               ]),
-          child: new ProfileColumnWidget(
-              screenScale: screenScale, baseSize: baseSize),
-        )
-      ]);
-    });
+            )
+          ],
+        ),
+      ),
+    );
+    // LayoutBuilder(builder: (context, constraints) {
+    //   final double baseSize = constraints.maxWidth;
+    //   final double screenScale = baseSize / 1024.0;
+    //   final scrollController = ScrollController();
+    //   return Stack(children: [
+    //     Positioned.fill(
+    //       child: Container(
+    //         decoration: BoxDecoration(
+    //           gradient: LinearGradient(
+    //               begin: Alignment.topLeft,
+    //               end: Alignment.bottomRight,
+    //               colors: <Color>[Colors.grey[200], Colors.grey[500]],
+    //               stops: [0.3, 0.8]),
+    //         ),
+    //       ),
+    //     ),
+    //     NestedScrollView(
+    //       headerSliverBuilder: (context, scrolled) {
+    //         return <Widget>[
+    //           SliverPersistentHeader(
+    //             delegate: _SliverAppBarDelegate(
+    //                 baseSize: baseSize, screenScale: screenScale),
+    //             pinned: true,
+    //           ),
+    //         ];
+    //       },
+    //       body: SingleChildScrollView(
+    //         child: Padding(
+    //           padding: EdgeInsets.only(left: baseSize * .3),
+    //           child: SkillColumnWidget(
+    //             screenScale: screenScale,
+    //             controller: scrollController,
+    //           ),
+    //         ),
+    //       ),
+    //     ),
+    //     Container(
+    //       width: baseSize * .3,
+    //       decoration: BoxDecoration(
+    //           color: Colors.grey[500].withOpacity(.7),
+    //           boxShadow: [
+    //             BoxShadow(
+    //                 offset: Offset(5.0 * screenScale, 0.0),
+    //                 color: Colors.black38,
+    //                 blurRadius: 5.0 * screenScale)
+    //           ]),
+    //       child:
+    //           ProfileColumnWidget(screenScale: screenScale, baseSize: baseSize),
+    //     )
+    //   ]);
+    // });
   }
 }
 
