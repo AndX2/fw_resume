@@ -11,6 +11,7 @@ import 'package:fw_resume/data.dart';
 import 'package:fw_resume/widget/pentagon.dart';
 import 'package:fw_resume/widget/plastic_tab.dart';
 // import 'package:fw_resume/widget/pentagon_outline.dart';
+import './data.dart';
 
 import 'icons.dart' as icons;
 import 'widget/bracket.dart';
