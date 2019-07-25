@@ -10,6 +10,7 @@ import 'dart:html';
 import 'package:fw_resume/data.dart';
 import 'package:fw_resume/widget/pentagon.dart';
 import 'package:fw_resume/widget/plastic_tab.dart';
+import 'package:fw_resume/widget/side_bar.dart';
 // import 'package:fw_resume/widget/pentagon_outline.dart';
 import './data.dart';
 
@@ -91,15 +92,15 @@ class ScreenBuilder extends StatelessWidget {
   }
 
   Widget _buildPhonePort() {
-    return ModilePage();
+    return MobilePage();
   }
 
   Widget _buildPhoneLand() {
-    return ModilePage();
+    return MobilePage();
   }
 
   Widget _buildTablet() {
-    return ModilePage();
+    return MobilePage();
   }
 
   Widget _buildDesk({double padding}) {
@@ -119,7 +120,7 @@ class ScreenBuilder extends StatelessWidget {
   }
 }
 
-class ModilePage extends StatelessWidget {
+class MobilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final params = ScreenParams.of(context);
@@ -1054,49 +1055,66 @@ class DesktopPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final params = ScreenParams.of(context);
     return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(vertical: 10.0),
       child: Card(
         elevation: 4.0,
         color: Colors.grey[700].withOpacity(0.85),
-        child: Row(
+        child: Stack(
           children: <Widget>[
-            Container(
-              width: params.baseSize * .4,
-              height: 2000.0,
-              // color: Color(0xFF215796),
-              child: Column(children: [
-                Stack(
-                  children: <Widget>[
-                    Positioned.fill(child: PlasticTab()),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        SizedBox(height: 50.0),
-                        Container(
-                          padding:
-                              EdgeInsets.only(right: params.baseSize * .05),
-                          width: params.baseSize * .3,
-                          height: params.baseSize * .3,
-                          child: Pentagon(
-                            color: Colors.deepOrange,
-                            shadowColor: Colors.black,
-                            elevation: 4.0 * params.scale,
-                            borderWidth: 3.0 * params.scale,
-                            radius: 50.0 * params.scale,
-                            child: Image.asset(
-                              'image/face_.jpg',
-                              fit: BoxFit.contain,
+            Row(crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: 350.0,
+                  height: 2000.0,
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned.fill(child: SideBar()),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          SizedBox(height: 50.0),
+                          Container(
+                            padding: EdgeInsets.only(right: 20.0),
+                            width: 310.0,
+                            height: 310.0,
+                            child: Pentagon(
+                              color: Colors.deepOrange,
+                              shadowColor: Colors.black,
+                              elevation: 4.0 * params.scale,
+                              borderWidth: 3.0 * params.scale,
+                              radius: 50.0 * params.scale,
+                              child: Image.asset(
+                                'image/face_.jpg',
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 50.0),
-                        BodyAboutBlock(params: params),
-                        SizedBox(height: 50.0),
-                      ],
-                    ),
-                  ],
+                          SizedBox(height: 50.0),
+                          BodyAboutBlock(params: params),
+                          SizedBox(height: 50.0),
+                          IconButton(
+                            iconSize: 80.0 * params.scale * params.fontScale,
+                            icon: Icon(
+                              icons.Icons.telegram,
+                              color: Colors.grey[300],
+                            ),
+                            onPressed: () => html.window
+                                .open('https://t.me/AndX2', 'Telegram'),
+                          ),
+                          Text(
+                            '@AndX2',
+                            style: Theme.of(context).textTheme.body2,
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ]),
-            )
+                Expanded(
+                  child: Container(height: 200, color: Colors.amber),
+                ),
+              ],
+            ),
           ],
         ),
       ),
