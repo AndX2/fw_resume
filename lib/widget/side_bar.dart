@@ -13,7 +13,7 @@ class SideBar extends StatelessWidget {
       children: <Widget>[
         Positioned.fill(
           child: Transform.translate(
-            offset: Offset(-50.0, -90.0),
+            offset: Offset(-30.0, -70.0),
             child: ClipPath(
               clipper: LeftSideClipper(),
               child: Container(

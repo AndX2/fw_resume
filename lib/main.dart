@@ -573,72 +573,89 @@ class BodySkillsBlock extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: skills.length,
         itemBuilder: (context, index) {
-          return Padding(
-              padding: EdgeInsets.all(16.0 * params.scale),
-              child: AspectRatio(
-                aspectRatio: 0.7,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40.0 * params.scale),
-                        bottomRight: Radius.circular(40.0 * params.scale)),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black26,
-                          offset:
-                              Offset(8.0 * params.scale, 8.0 * params.scale),
-                          blurRadius: 5.0 * params.scale)
-                    ],
-                  ),
-                  child: Column(
+          return SkillVerticalWidget(
+            params: params,
+            skill: skills[index],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class SkillVerticalWidget extends StatelessWidget {
+  const SkillVerticalWidget({
+    Key key,
+    @required this.params,
+    @required this.skill,
+  }) : super(key: key);
+
+  final ScreenParams params;
+  final Map<String, dynamic> skill;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: EdgeInsets.all(10.0 * params.scale),
+        child: AspectRatio(
+          aspectRatio: 0.7,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40.0 * params.scale),
+                  bottomRight: Radius.circular(40.0 * params.scale)),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black26,
+                    offset: Offset(8.0 * params.scale, 8.0 * params.scale),
+                    blurRadius: 5.0 * params.scale)
+              ],
+            ),
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Stack(
                     children: <Widget>[
-                      Expanded(
-                        child: Stack(
-                          children: <Widget>[
-                            AspectRatio(
-                              aspectRatio: 1.0,
-                              child: Padding(
-                                padding: EdgeInsets.all(40.0 * params.scale),
-                                child: Image.asset(
-                                  skills[index]['image'],
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                            AspectRatio(
-                              aspectRatio: 1.0,
-                              child: Padding(
-                                padding: EdgeInsets.all(20.0 * params.scale),
-                                child: CustomPaint(
-                                  painter: SkillArcPainter(
-                                      value: skills[index]['rate'],
-                                      color: Color(
-                                          int.parse(skills[index]['color'])),
-                                      screenScale: params.scale),
-                                ),
-                              ),
-                            )
-                          ],
+                      AspectRatio(
+                        aspectRatio: 1.0,
+                        child: Padding(
+                          padding: EdgeInsets.all(30.0 * params.scale),
+                          child: Image.asset(
+                            skill['image'],
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
-                      Text(
-                        skills[index]['name'],
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.body1.apply(
-                            color: Colors.grey[700],
-                            fontSizeFactor: params.fontScale * params.scale),
-                      ),
-                      SizedBox(
-                        height: 16.0 * params.scale,
+                      AspectRatio(
+                        aspectRatio: 1.0,
+                        child: Padding(
+                          padding: EdgeInsets.all(20.0 * params.scale),
+                          child: CustomPaint(
+                            painter: SkillArcPainter(
+                                value: skill['rate'],
+                                color: Color(int.parse(skill['color'])),
+                                screenScale: params.scale),
+                          ),
+                        ),
                       )
                     ],
                   ),
                 ),
-              ));
-        },
-      ),
-    );
+                Text(
+                  skill['name'],
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.body1.apply(
+                      color: Colors.grey[700],
+                      fontSizeFactor: params.fontScale * params.scale),
+                ),
+                SizedBox(
+                  height: 16.0 * params.scale,
+                )
+              ],
+            ),
+          ),
+        ));
   }
 }
 
@@ -1058,14 +1075,15 @@ class DesktopPage extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10.0),
       child: Card(
         elevation: 4.0,
-        color: Colors.grey[700].withOpacity(0.85),
+        color: Colors.grey[800].withOpacity(0.9),
         child: Stack(
           children: <Widget>[
-            Row(crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  width: 350.0,
-                  height: 2000.0,
+                  width: 320.0,
+                  height: 1400.0,
                   child: Stack(
                     children: <Widget>[
                       Positioned.fill(child: SideBar()),
@@ -1074,9 +1092,9 @@ class DesktopPage extends StatelessWidget {
                         children: <Widget>[
                           SizedBox(height: 50.0),
                           Container(
-                            padding: EdgeInsets.only(right: 20.0),
-                            width: 310.0,
-                            height: 310.0,
+                            // padding: EdgeInsets.only(left: 10.0),
+                            width: 285.0,
+                            height: 285.0,
                             child: Pentagon(
                               color: Colors.deepOrange,
                               shadowColor: Colors.black,
@@ -1093,7 +1111,7 @@ class DesktopPage extends StatelessWidget {
                           BodyAboutBlock(params: params),
                           SizedBox(height: 50.0),
                           IconButton(
-                            iconSize: 80.0 * params.scale * params.fontScale,
+                            iconSize: 60.0,
                             icon: Icon(
                               icons.Icons.telegram,
                               color: Colors.grey[300],
@@ -1110,8 +1128,245 @@ class DesktopPage extends StatelessWidget {
                     ],
                   ),
                 ),
+                RotatedBox(
+                  quarterTurns: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 150.0),
+                    child: Text(
+                      'Dart developer'.toUpperCase(),
+                      style: TextStyle(fontSize: 70.0),
+                    ),
+                  ),
+                ),
                 Expanded(
-                  child: Container(height: 200, color: Colors.amber),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 250.0),
+                      BodyCaptionWidget(
+                        params: params,
+                        name: 'skills',
+                        iconData: icons.Icons.brief,
+                      ),
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: List.generate(skills.length, (index) {
+                          return Container(
+                            width: 150.0,
+                            child: SkillVerticalWidget(
+                              params: params,
+                              skill: skills[index],
+                            ),
+                          );
+                        }),
+                      ),
+                      SizedBox(height: 30.0),
+                      BodyCaptionWidget(
+                        params: params,
+                        name: 'education',
+                        iconData: icons.Icons.book,
+                      ),
+                      ExpandableTextBlock(
+                        firstChild: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                                '${educations[0]['time']}\n ${educations[0]['value']}',
+                                style: Theme.of(context).textTheme.body1),
+                            LinkWidget(
+                              screenScale: .7,
+                              text: educations[0]['link'],
+                              fontSize: 22.0,
+                            ),
+                          ],
+                        ),
+                        secondChild: Padding(
+                          padding: EdgeInsets.only(left: 32.0),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: educations.map((item) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text('${item['time']}\n ${item['value']}',
+                                        style:
+                                            Theme.of(context).textTheme.body1),
+                                    LinkWidget(
+                                      screenScale: .7,
+                                      text: item['linkName'],
+                                      url: item['link'],
+                                    ),
+                                    (item != educations.last)
+                                        ? Divider()
+                                        : Container(),
+                                  ],
+                                );
+                              }).toList()),
+                        ),
+                      ),
+                      SizedBox(height: 30.0),
+                      BodyCaptionWidget(
+                        params: params,
+                        name: 'achivements',
+                        iconData: icons.Icons.achive,
+                      ),
+                      ExpandableTextBlock(
+                        firstChild: Column(
+                          children: <Widget>[
+                            Text('${achive[0]['time']}\n${achive[0]['value']}',
+                                style: Theme.of(context).textTheme.body1),
+                          ],
+                        ),
+                        secondChild: Column(
+                            children: achive.map<Widget>((item) {
+                          return Padding(
+                            padding: EdgeInsets.only(left: 32.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text('${item['time']}\n${item['value']}',
+                                    style: Theme.of(context).textTheme.body1),
+                                (item != achive.last) ? Divider() : Container(),
+                              ],
+                            ),
+                          );
+                        }).toList()),
+                      ),
+                      SizedBox(height: 30.0),
+                      BodyCaptionWidget(
+                        params: params,
+                        name: 'public demo',
+                        iconData: icons.Icons.gitFork,
+                      ),
+                      Wrap(
+                        spacing: 16.0,
+                        runSpacing: 16.0,
+                        children: List.generate(demo.length, (index) {
+                          return GestureDetector(
+                            onTap: () => html.window.open(
+                                demo[index]['link'], demo[index]['linkName']),
+                            child: Container(
+                                width: 290.0,
+                                padding: EdgeInsets.symmetric(vertical: 12.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(4.0 * params.scale)),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black26,
+                                        offset: Offset(8.0 * params.scale,
+                                            8.0 * params.scale),
+                                        blurRadius: 5.0 * params.scale)
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    SizedBox(width: 32.0),
+                                    Icon(
+                                      icons.Icons.fromUnicode(
+                                          demo[index]['icon']),
+                                      color: Colors.grey[700],
+                                      size: 40.0,
+                                    ),
+                                    SizedBox(width: 16.0),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          demo[index]['value'],
+                                          textAlign: TextAlign.left,
+                                          maxLines: 3,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .caption
+                                              .apply(
+                                                  color: Colors.grey[700],
+                                                  fontSizeFactor:
+                                                      params.fontScale *
+                                                          params.scale),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                )),
+                          );
+                        }),
+                      ),
+                      SizedBox(height: 30.0),
+                      BodyCaptionWidget(
+                        params: params,
+                        name: 'expectations',
+                        iconData: icons.Icons.handRight,
+                      ),
+                      Wrap(
+                        spacing:8.0,
+                        runSpacing: 8.0,
+                        children: <Widget>[
+                          ...offerExp.map((item) => Card(
+                              elevation: 8.0,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    width: 290,
+                                    padding: EdgeInsets.symmetric(vertical: 6.0),
+                                    color: Color(0xFF53C5F9),
+                                    child: Row(
+                                      children: <Widget>[
+                                        SizedBox(width: 32.0),
+                                        Icon(
+                                          icons.Icons.fromUnicode(item['icon']),
+                                          color: Colors.grey[700],
+                                          size: 40.0,
+                                        ),
+                                        SizedBox(width: 16.0),
+                                        Text(
+                                          item['title'],
+                                          textAlign: TextAlign.left,
+                                          maxLines: 3,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .caption
+                                              .apply(
+                                                  color: Colors.grey[700],
+                                                  fontSizeFactor:
+                                                      params.fontScale),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 32.0 * params.scale),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      SizedBox(width: 32.0 * params.scale),
+                                      Text(
+                                        item['value'],
+                                        textAlign: TextAlign.left,
+                                        maxLines: 3,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption
+                                            .apply(
+                                                color: Colors.grey[700],
+                                                fontSizeFactor:
+                                                    params.fontScale *
+                                                        params.scale),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 32.0 * params.scale),
+                                ],
+                              ))),
+                        ],
+                      ),
+                      SizedBox(height: 50.0),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -2022,7 +2277,8 @@ class ExpandableTextBlock extends StatefulWidget {
   final Widget firstChild;
   final Widget secondChild;
 
-  ExpandableTextBlock({this.screenScale, this.firstChild, this.secondChild});
+  ExpandableTextBlock(
+      {this.screenScale = 1.0, this.firstChild, this.secondChild});
 
   @override
   State<StatefulWidget> createState() {
@@ -2079,7 +2335,7 @@ class SkillWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: (1024.0 * 0.6 * screenScale) / (gridColumnCount * 1.15),
-      height: ((1024.0 * 0.6 * screenScale) / (gridColumnCount * 1.15) * 1.15) *
+      height: ((1024.0 * 0.6 * screenScale) / (gridColumnCount * 1.15) * 1.2) *
           screenScale,
       child: Stack(
         alignment: Alignment.topCenter,
@@ -2100,6 +2356,7 @@ class SkillWidget extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: Text(
                 skill['name'],
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.grey[600],
                   fontSize: 24.0 * screenScale * (3.0 / gridColumnCount),
@@ -2128,7 +2385,7 @@ class SkillWidget extends StatelessWidget {
 
 class SkillArcPainter extends CustomPainter {
   final double screenScale;
-  double countScale = 1.0;
+  double countScale;
   final double value;
   Paint _paint;
 
@@ -2137,10 +2394,11 @@ class SkillArcPainter extends CustomPainter {
       @required this.screenScale,
       @required Color color,
       this.countScale = 1}) {
+    double width = 16.0 * screenScale * countScale;
     _paint = Paint()
       ..color = color
-      ..strokeWidth = 16.0 * screenScale * countScale
-      ..strokeCap = StrokeCap.round
+      ..strokeWidth = width > 8.0 ? 8.0 : 16.0 * screenScale * countScale
+      ..strokeCap = StrokeCap.square
       ..style = PaintingStyle.stroke;
   }
 

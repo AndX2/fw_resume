@@ -34,11 +34,16 @@ const educations = [
 const skills = [
   {
     'name': 'Flutter',
-    'rate': 0.8,
+    'rate': 0.7,
     'image': 'flutter.png',
     'color': '0xFF28B5F5'
   },
-  {'name': 'Dart', 'rate': 0.8, 'image': 'dart.png', 'color': '0xFF00B4AA'},
+  {
+    'name': 'Dart',
+    'rate': 0.7,
+    'image': 'dart.png',
+    'color': '0xFF00B4AA',
+  },
   {
     'name': 'Aqueduct',
     'rate': 0.5,
