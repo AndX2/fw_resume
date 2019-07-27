@@ -3,7 +3,7 @@
     "family": "gs",
     "fonts": [
       {
-        "asset": "GoogleSans-Regular.ttf"
+        "asset": "font/GoogleSans-Regular.ttf"
       }
     ]
   },
@@ -11,7 +11,7 @@
     "family": "fa",
     "fonts": [
       {
-        "asset": "FontAwesome.otf"
+        "asset": "font/FontAwesome.otf"
       }
     ]
   },
@@ -19,15 +19,27 @@
     "family": "ss",
     "fonts": [
       {
-        "asset": "Serpentine-Sans-ICG-Cyrillic-Bold.otf"
+        "asset": "font/Serpentine-Sans-ICG-Cyrillic-Bold.otf"
       }
     ]
   },
   {
-    "family": "nova",
+    "family": "roboto",
     "fonts": [
       {
-        "asset": "NovitoNova-Regular.otf"
+        "asset": "font/Roboto-Regular.ttf"
+      },
+      {
+        "asset": "font/Roboto-Italic.ttf",
+        "style": "italic"
+      },
+      {
+        "asset": "font/Roboto-Bold.ttf",
+        "style": "bold"
+      },
+      {
+        "asset": "font/Roboto-BoldItalic.ttf",
+        "style": "bolditalic"
       }
     ]
   }

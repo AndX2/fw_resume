@@ -17,6 +17,7 @@ abstract class Icons {
   static const IconData handShake = IconData(0xf2b5, fontFamily: 'fa');
   static const IconData handRight = IconData(0xf0a4, fontFamily: 'fa');
   static const IconData money = IconData(0xf0d6, fontFamily: 'fa');
+  static const IconData link = IconData(0xf0c1, fontFamily: 'fa');
 
   static fromUnicode(int code) {
     return IconData(code, fontFamily: 'fa');

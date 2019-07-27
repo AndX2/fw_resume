@@ -9,7 +9,6 @@ import 'dart:html';
 
 import 'package:fw_resume/data.dart';
 import 'package:fw_resume/widget/pentagon.dart';
-import 'package:fw_resume/widget/plastic_tab.dart';
 import 'package:fw_resume/widget/side_bar.dart';
 // import 'package:fw_resume/widget/pentagon_outline.dart';
 import './data.dart';
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
           title: TextStyle(
               fontFamily: 'ss', fontSize: 36.0, color: Colors.grey[300]),
           body1: TextStyle(
-              fontFamily: 'ss', fontSize: 18.0, color: Colors.grey[300]),
+              fontFamily: 'roboto', fontSize: 18.0, color: Colors.grey[300]),
           body2: TextStyle(
               fontFamily: 'ss', fontSize: 24.0, color: Colors.grey[300]),
           button: TextStyle(
@@ -40,7 +39,7 @@ class MyApp extends StatelessWidget {
           subtitle: TextStyle(
               fontFamily: 'ss', fontSize: 26.0, color: Colors.grey[300]),
           caption: TextStyle(
-              fontFamily: 'ss', fontSize: 14.0, color: Colors.grey[300]),
+              fontFamily: 'roboto', fontSize: 14.0, color: Colors.grey[300]),
         ),
       ),
       routes: {
@@ -612,50 +611,69 @@ class SkillVerticalWidget extends StatelessWidget {
                     blurRadius: 5.0 * params.scale)
               ],
             ),
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: Stack(
-                    children: <Widget>[
-                      AspectRatio(
-                        aspectRatio: 1.0,
-                        child: Padding(
-                          padding: EdgeInsets.all(30.0 * params.scale),
-                          child: Image.asset(
-                            skill['image'],
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
-                      AspectRatio(
-                        aspectRatio: 1.0,
-                        child: Padding(
-                          padding: EdgeInsets.all(20.0 * params.scale),
-                          child: CustomPaint(
-                            painter: SkillArcPainter(
-                                value: skill['rate'],
-                                color: Color(int.parse(skill['color'])),
-                                screenScale: params.scale),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Text(
-                  skill['name'],
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.body1.apply(
-                      color: Colors.grey[700],
-                      fontSizeFactor: params.fontScale * params.scale),
-                ),
-                SizedBox(
-                  height: 16.0 * params.scale,
-                )
-              ],
-            ),
+            child: SkillContentWidget(
+                params: params, context: context, skill: skill),
           ),
         ));
+  }
+}
+
+class SkillContentWidget extends StatelessWidget {
+  const SkillContentWidget({
+    Key key,
+    @required this.params,
+    @required this.context,
+    @required this.skill,
+  }) : super(key: key);
+
+  final ScreenParams params;
+  final BuildContext context;
+  final Map<String, dynamic> skill;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: Stack(
+            children: <Widget>[
+              AspectRatio(
+                aspectRatio: 1.0,
+                child: Padding(
+                  padding: EdgeInsets.all(30.0 * params.scale),
+                  child: Image.asset(
+                    skill['image'],
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              AspectRatio(
+                aspectRatio: 1.0,
+                child: Padding(
+                  padding: EdgeInsets.all(20.0 * params.scale),
+                  child: CustomPaint(
+                    painter: SkillArcPainter(
+                        value: skill['rate'],
+                        color: Color(int.parse(skill['color'])),
+                        screenScale: params.scale),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        Text(
+          skill['name'],
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.body1.apply(
+              color: Colors.grey[700],
+              fontSizeFactor: params.fontScale * params.scale),
+        ),
+        SizedBox(
+          height: 16.0 * params.scale,
+        )
+      ],
+    );
   }
 }
 
@@ -1134,7 +1152,10 @@ class DesktopPage extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 150.0),
                     child: Text(
                       'Dart developer'.toUpperCase(),
-                      style: TextStyle(fontSize: 70.0),
+                      style: Theme.of(context)
+                          .textTheme
+                          .title
+                          .copyWith(fontSize: 70.0),
                     ),
                   ),
                 ),
@@ -1143,228 +1164,92 @@ class DesktopPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(height: 250.0),
-                      BodyCaptionWidget(
-                        params: params,
-                        name: 'skills',
-                        iconData: icons.Icons.brief,
-                      ),
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: List.generate(skills.length, (index) {
-                          return Container(
-                            width: 150.0,
-                            child: SkillVerticalWidget(
-                              params: params,
-                              skill: skills[index],
-                            ),
-                          );
-                        }),
-                      ),
-                      SizedBox(height: 30.0),
-                      BodyCaptionWidget(
-                        params: params,
-                        name: 'education',
-                        iconData: icons.Icons.book,
-                      ),
-                      ExpandableTextBlock(
-                        firstChild: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                                '${educations[0]['time']}\n ${educations[0]['value']}',
-                                style: Theme.of(context).textTheme.body1),
-                            LinkWidget(
-                              screenScale: .7,
-                              text: educations[0]['link'],
-                              fontSize: 22.0,
-                            ),
-                          ],
-                        ),
-                        secondChild: Padding(
-                          padding: EdgeInsets.only(left: 32.0),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: educations.map((item) {
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text('${item['time']}\n ${item['value']}',
-                                        style:
-                                            Theme.of(context).textTheme.body1),
-                                    LinkWidget(
-                                      screenScale: .7,
-                                      text: item['linkName'],
-                                      url: item['link'],
-                                    ),
-                                    (item != educations.last)
-                                        ? Divider()
-                                        : Container(),
-                                  ],
-                                );
-                              }).toList()),
-                        ),
-                      ),
-                      SizedBox(height: 30.0),
-                      BodyCaptionWidget(
-                        params: params,
-                        name: 'achivements',
-                        iconData: icons.Icons.achive,
-                      ),
-                      ExpandableTextBlock(
-                        firstChild: Column(
-                          children: <Widget>[
-                            Text('${achive[0]['time']}\n${achive[0]['value']}',
-                                style: Theme.of(context).textTheme.body1),
-                          ],
-                        ),
-                        secondChild: Column(
-                            children: achive.map<Widget>((item) {
-                          return Padding(
-                            padding: EdgeInsets.only(left: 32.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text('${item['time']}\n${item['value']}',
-                                    style: Theme.of(context).textTheme.body1),
-                                (item != achive.last) ? Divider() : Container(),
-                              ],
-                            ),
-                          );
-                        }).toList()),
-                      ),
-                      SizedBox(height: 30.0),
-                      BodyCaptionWidget(
-                        params: params,
-                        name: 'public demo',
-                        iconData: icons.Icons.gitFork,
-                      ),
-                      Wrap(
-                        spacing: 16.0,
-                        runSpacing: 16.0,
-                        children: List.generate(demo.length, (index) {
-                          return GestureDetector(
-                            onTap: () => html.window.open(
-                                demo[index]['link'], demo[index]['linkName']),
-                            child: Container(
-                                width: 290.0,
-                                padding: EdgeInsets.symmetric(vertical: 12.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(4.0 * params.scale)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black26,
-                                        offset: Offset(8.0 * params.scale,
-                                            8.0 * params.scale),
-                                        blurRadius: 5.0 * params.scale)
-                                  ],
+                      MainColumnBlockWidget(
+                        headerImageLink: 'image/skills.png',
+                        header: 'Skills',
+                        child: Wrap(
+                          alignment: WrapAlignment.center,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: List.generate(skills.length, (index) {
+                            return Container(
+                              width: 130.0,
+                              child: AspectRatio(
+                                aspectRatio: .8,
+                                child: SkillContentWidget(
+                                  context: context,
+                                  params: params,
+                                  skill: skills[index],
                                 ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    SizedBox(width: 32.0),
-                                    Icon(
-                                      icons.Icons.fromUnicode(
-                                          demo[index]['icon']),
-                                      color: Colors.grey[700],
-                                      size: 40.0,
-                                    ),
-                                    SizedBox(width: 16.0),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          demo[index]['value'],
-                                          textAlign: TextAlign.left,
-                                          maxLines: 3,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption
-                                              .apply(
-                                                  color: Colors.grey[700],
-                                                  fontSizeFactor:
-                                                      params.fontScale *
-                                                          params.scale),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                )),
-                          );
-                        }),
+                              ),
+                            );
+                          }),
+                        ),
                       ),
-                      SizedBox(height: 30.0),
-                      BodyCaptionWidget(
-                        params: params,
-                        name: 'expectations',
-                        iconData: icons.Icons.handRight,
+                      SizedBox(height: 20.0),
+                      MainColumnBlockWidget(
+                        headerImageLink: 'image/education.png',
+                        header: 'Education',
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 16.0, top: 16.0, right: 32.0, bottom: 16.0),
+                          child: Column(
+                              children: educations.map((item) {
+                            return EducationItemWidget(item: item);
+                          }).toList()),
+                        ),
                       ),
-                      Wrap(
-                        spacing:8.0,
-                        runSpacing: 8.0,
-                        children: <Widget>[
-                          ...offerExp.map((item) => Card(
-                              elevation: 8.0,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    width: 290,
-                                    padding: EdgeInsets.symmetric(vertical: 6.0),
-                                    color: Color(0xFF53C5F9),
-                                    child: Row(
-                                      children: <Widget>[
-                                        SizedBox(width: 32.0),
-                                        Icon(
-                                          icons.Icons.fromUnicode(item['icon']),
-                                          color: Colors.grey[700],
-                                          size: 40.0,
-                                        ),
-                                        SizedBox(width: 16.0),
-                                        Text(
-                                          item['title'],
-                                          textAlign: TextAlign.left,
-                                          maxLines: 3,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption
-                                              .apply(
-                                                  color: Colors.grey[700],
-                                                  fontSizeFactor:
-                                                      params.fontScale),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: 32.0 * params.scale),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      SizedBox(width: 32.0 * params.scale),
-                                      Text(
-                                        item['value'],
-                                        textAlign: TextAlign.left,
-                                        maxLines: 3,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .caption
-                                            .apply(
-                                                color: Colors.grey[700],
-                                                fontSizeFactor:
-                                                    params.fontScale *
-                                                        params.scale),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 32.0 * params.scale),
-                                ],
-                              ))),
-                        ],
+                      SizedBox(height: 20.0),
+                      MainColumnBlockWidget(
+                        headerImageLink: 'image/achivement.png',
+                        header: 'Achivements',
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 16.0, top: 16.0, right: 32.0, bottom: 16.0),
+                          child: Column(
+                              children: achive.map((item) {
+                            return AchivementItemWidget(item: item);
+                          }).toList()),
+                        ),
                       ),
-                      SizedBox(height: 50.0),
+                      SizedBox(height: 20.0),
+                      MainColumnBlockWidget(
+                        headerImageLink: 'image/demo.png',
+                        header: 'Public demo',
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 16.0, top: 16.0, right: 32.0, bottom: 16.0),
+                          child: Column(
+                              children: demo.map((item) {
+                            return Column(
+                              children: <Widget>[
+                                DemoItemWidget(item: item),
+                                (demo.last != item) ? Divider() : Container(),
+                              ],
+                            );
+                          }).toList()),
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                      MainColumnBlockWidget(
+                        headerImageLink: 'image/expect.png',
+                        header: 'Expectations',
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: 16.0, top: 16.0, right: 32.0, bottom: 16.0),
+                          child: Column(
+                              children: offerExp.map((item) {
+                            return Column(
+                              children: <Widget>[
+                                ExpectItemWidget(item: item),
+                                (offerExp.last != item)
+                                    ? Divider()
+                                    : Container(),
+                              ],
+                            );
+                          }).toList()),
+                        ),
+                      ),
+                      SizedBox(height: 40.0),
                     ],
                   ),
                 ),
@@ -1374,57 +1259,267 @@ class DesktopPage extends StatelessWidget {
         ),
       ),
     );
-    // LayoutBuilder(builder: (context, constraints) {
-    //   final double baseSize = constraints.maxWidth;
-    //   final double screenScale = baseSize / 1024.0;
-    //   final scrollController = ScrollController();
-    //   return Stack(children: [
-    //     Positioned.fill(
-    //       child: Container(
-    //         decoration: BoxDecoration(
-    //           gradient: LinearGradient(
-    //               begin: Alignment.topLeft,
-    //               end: Alignment.bottomRight,
-    //               colors: <Color>[Colors.grey[200], Colors.grey[500]],
-    //               stops: [0.3, 0.8]),
-    //         ),
-    //       ),
-    //     ),
-    //     NestedScrollView(
-    //       headerSliverBuilder: (context, scrolled) {
-    //         return <Widget>[
-    //           SliverPersistentHeader(
-    //             delegate: _SliverAppBarDelegate(
-    //                 baseSize: baseSize, screenScale: screenScale),
-    //             pinned: true,
-    //           ),
-    //         ];
-    //       },
-    //       body: SingleChildScrollView(
-    //         child: Padding(
-    //           padding: EdgeInsets.only(left: baseSize * .3),
-    //           child: SkillColumnWidget(
-    //             screenScale: screenScale,
-    //             controller: scrollController,
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-    //     Container(
-    //       width: baseSize * .3,
-    //       decoration: BoxDecoration(
-    //           color: Colors.grey[500].withOpacity(.7),
-    //           boxShadow: [
-    //             BoxShadow(
-    //                 offset: Offset(5.0 * screenScale, 0.0),
-    //                 color: Colors.black38,
-    //                 blurRadius: 5.0 * screenScale)
-    //           ]),
-    //       child:
-    //           ProfileColumnWidget(screenScale: screenScale, baseSize: baseSize),
-    //     )
-    //   ]);
-    // });
+  }
+}
+
+class MainColumnBlockWidget extends StatelessWidget {
+  const MainColumnBlockWidget({
+    @required this.header,
+    @required this.headerImageLink,
+    @required this.child,
+    Key key,
+  }) : super(key: key);
+
+  final String headerImageLink;
+  final Widget child;
+  final String header;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 16.0),
+      child: Card(
+        color: Colors.white,
+        child: Container(
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                height: 100.0,
+                width: double.infinity,
+                padding: EdgeInsets.only(left: 32.0, bottom: 8.0),
+                alignment: Alignment.bottomLeft,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(headerImageLink),
+                      fit: BoxFit.cover,
+                      colorFilter:
+                          ColorFilter.mode(Colors.black, BlendMode.clear),
+                      alignment: Alignment.topCenter),
+                ),
+                foregroundDecoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [Colors.black87, Colors.black12],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomCenter)),
+                child: Text(header.toUpperCase(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .title
+                        .copyWith(color: Colors.grey[200], fontSize: 36.0)),
+              ),
+              child,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AchivementItemWidget extends StatelessWidget {
+  AchivementItemWidget({
+    @required this.item,
+    Key key,
+  }) : super(key: key);
+
+  final Map<String, String> item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            width: 100.0,
+            alignment: Alignment.topRight,
+            child: Text(
+              item['time'],
+              style: Theme.of(context).textTheme.caption.copyWith(
+                  fontWeight: FontWeight.bold, color: Color(0xFF00569C)),
+            ),
+          ),
+          SizedBox(width: 10.0),
+          Image.asset(
+            item['image'],
+            width: 60.0,
+            height: 60.0,
+            fit: BoxFit.cover,
+          ),
+          SizedBox(width: 10.0),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  item['value'],
+                  style: Theme.of(context).textTheme.caption.copyWith(
+                      fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class DemoItemWidget extends StatelessWidget {
+  DemoItemWidget({
+    @required this.item,
+    Key key,
+  }) : super(key: key);
+
+  final Map<String, dynamic> item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: InkWell(
+        onTap: () {
+          html.window.open(item['link'], item['linkName']);
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(width: 32.0),
+            Icon(
+              icons.Icons.fromUnicode(item['icon']),
+              color: Color(0xFF00569C),
+              size: 40.0,
+            ),
+            SizedBox(width: 16.0),
+            Text(
+              item['value'],
+              textAlign: TextAlign.left,
+              maxLines: 3,
+              style: Theme.of(context)
+                  .textTheme
+                  .caption
+                  .apply(color: Colors.grey[700]),
+            ),
+            Spacer(),
+            Icon(
+              icons.Icons.link,
+              color: Colors.grey[700],
+              size: 30.0,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ExpectItemWidget extends StatelessWidget {
+  ExpectItemWidget({
+    @required this.item,
+    Key key,
+  }) : super(key: key);
+
+  final Map<String, dynamic> item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(width: 32.0),
+          Icon(
+            icons.Icons.fromUnicode(item['icon']),
+            color: Color(0xFF00569C),
+            size: 40.0,
+          ),
+          SizedBox(width: 16.0),
+          Text(
+            item['title'],
+            textAlign: TextAlign.left,
+            maxLines: 3,
+            style: Theme.of(context)
+                .textTheme
+                .caption
+                .apply(color: Colors.grey[700]),
+          ),
+          Spacer(),
+          Text(
+            item['value'],
+            textAlign: TextAlign.right,
+            maxLines: 3,
+            style: Theme.of(context)
+                .textTheme
+                .caption
+                .apply(color: Colors.grey[700]),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EducationItemWidget extends StatefulWidget {
+  const EducationItemWidget({
+    @required this.item,
+    Key key,
+  }) : super(key: key);
+
+  final Map<String, String> item;
+
+  @override
+  _EducationItemWidgetState createState() => _EducationItemWidgetState();
+}
+
+class _EducationItemWidgetState extends State<EducationItemWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        html.window.open(widget.item['link'], widget.item['linkName']);
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              width: 130.0,
+              alignment: Alignment.topRight,
+              child: Text(
+                widget.item['time'],
+                style: Theme.of(context).textTheme.caption.copyWith(
+                    fontWeight: FontWeight.bold, color: Color(0xFF00569C)),
+              ),
+            ),
+            SizedBox(width: 10.0),
+            Image.asset(
+              widget.item['image'],
+              width: 60.0,
+              height: 60.0,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(width: 10.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    widget.item['value'],
+                    style: Theme.of(context).textTheme.caption.copyWith(
+                        fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -2305,23 +2400,25 @@ class _ExpandableTextBlockState extends State<ExpandableTextBlock> {
               left: 20.0 * widget.screenScale,
               right: 20.0 * widget.screenScale),
           child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  isExpanded ? isExpanded = false : isExpanded = true;
-                });
-              },
-              child: Text(
-                isExpanded ? "less" : "more..",
-                style: TextStyle(
-                    color: Color(0xFFFB382F),
-                    fontWeight: FontWeight.w700,
-                    fontSize: 22.0 * widget.screenScale),
-              )),
+            onTap: () {
+              setState(() {
+                isExpanded ? isExpanded = false : isExpanded = true;
+              });
+            },
+            child: Text(
+              isExpanded ? "less" : "more...",
+              style: Theme.of(context)
+                  .textTheme
+                  .body1
+                  .apply(color: Color(0xFFFB382F)),
+            ),
+          ),
         ),
       ],
     );
   }
 }
+// Color(0xFFFB382F)
 
 class SkillWidget extends StatelessWidget {
   final double screenScale;

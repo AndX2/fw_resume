@@ -47,7 +47,7 @@ double _clipperHeight = 800.0;
 class LeftSideClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    print(size);
+    // print(size);
     var path = Path();
     path.moveTo(0.0, _topPadding);
     path.lineTo(size.width,

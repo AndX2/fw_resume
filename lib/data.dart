@@ -115,11 +115,6 @@ const demo = [
 
 const offerExp = [
   {
-    'icon': 0xf0d6,
-    'title': 'salary',
-    'value': 'on demand',
-  },
-  {
     'icon': 0xf051,
     'title': 'landing time',
     'value': '3...6 month\nemployer office',
