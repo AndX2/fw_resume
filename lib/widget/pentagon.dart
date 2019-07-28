@@ -1,8 +1,3 @@
-// import 'dart:math';
-
-import './pentagon_outline.dart';
-export './pentagon_outline.dart' ;
-
 import 'package:flutter_web/material.dart';
 
 import './pentagon_util.dart';
